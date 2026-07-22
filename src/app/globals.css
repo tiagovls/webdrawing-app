@@ -1,26 +1,199 @@
 @import "tailwindcss";
+@source "../";
+@theme {
+  --font-inter: var(--font-inter);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-brand-400: #396333;
+  --color-brand-500: #2A4B26; /* Green */
+  --color-brand-600: #1F381C;
+  --color-brand-700: #152713;
+  --color-brand-glow: rgba(42, 75, 38, 0.35);
+
+  --color-accent-400: #E6B93D;
+  --color-accent-500: #DCAB24; /* Yellow */
+  --color-accent-600: #B58C1C;
+
+  --color-earth-500: #8A5A29; /* Brown */
+
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+  
+  --color-dark-700: #334155;
+  --color-dark-900: #0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Reset & Base ──────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-surface-50);
+  color: var(--color-dark-900);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  min-height: 100dvh;
 }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-surface-100); }
+::-webkit-scrollbar-thumb { background: var(--color-surface-300); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-brand-500); }
+
+/* ─── Selection ──────────────────────────────────────────────────────── */
+::selection {
+  background: var(--color-brand-glow);
+  color: var(--color-dark-900);
+}
+
+/* ─── Glass Card ─────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(24, 24, 31, 0.7);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Gradient Text ──────────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #e0e0ff 0%, #6366f1 50%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glow Effects ───────────────────────────────────────────────────── */
+.glow-brand {
+  box-shadow: 0 0 40px var(--color-brand-glow);
+}
+
+.glow-brand-sm {
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.2);
+}
+
+/* ─── Animations ─────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--color-brand-glow); }
+  50%       { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-fade-in    { animation: fadeIn 0.4s ease-out forwards; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-spin-slow  { animation: spin-slow 8s linear infinite; }
+
+/* ─── Delay utilities ────────────────────────────────────────────────── */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* ─── 3D Viewer overrides ────────────────────────────────────────────── */
+#viewer-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+#viewer-canvas:active { cursor: grabbing; }
+
+/* Annotation pin */
+.annotation-pin {
+  position: absolute;
+  pointer-events: all;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.annotation-pin:hover { transform: translate(-50%, -50%) scale(1.15); }
+
+/* Measurement label */
+.measure-label {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(99, 102, 241, 0.9);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  letter-spacing: 0.02em;
+}
+
+/* ─── View Cube ──────────────────────────────────────────────────────── */
+.view-cube-container {
+  perspective: 400px;
+  width: 80px;
+  height: 80px;
+  touch-action: none;
+}
+
+.view-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.view-cube-face {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 2px solid var(--color-surface-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-brand-600);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+  backface-visibility: hidden;
+}
+
+.view-cube-face:hover {
+  background: var(--color-brand-50);
+  color: var(--color-brand-500);
+  border-color: var(--color-brand-300);
+}
+
+.view-cube-front  { transform: rotateY(  0deg) translateZ(40px); }
+.view-cube-right  { transform: rotateY( 90deg) translateZ(40px); }
+.view-cube-back   { transform: rotateY(180deg) translateZ(40px); }
+.view-cube-left   { transform: rotateY(-90deg) translateZ(40px); }
+.view-cube-top    { transform: rotateX( 90deg) translateZ(40px); }
+.view-cube-bottom { transform: rotateX(-90deg) translateZ(40px); }

@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                     String    @id // Clerk User ID
+  email                  String    @unique
+  name                   String?
+  projects               Project[]
+  
+  // Stripe Data
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  hasUsedTrial           Boolean   @default(false)
+  
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+}
+
+model Project {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?
+  fileName    String      // original GLB filename
+  fileKey     String      // R2/S3 storage key
+  fileSize    Int         // bytes
+  status      ProjectStatus @default(READY)
+  shareLinks  ShareLink[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+enum ProjectStatus {
+  READY
+  ERROR
+}
+
+model ShareLink {
+  id           String       @id @default(cuid())
+  token        String       @unique
+  projectId    String
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  passwordHash String?      // bcrypt hash, null if no password
+  expiresAt    DateTime?    // null = never expires
+  creatorNote  String?      // Notes written by the link creator
+  annotations  Annotation[]
+  chatMessages ChatMessage[]
+  viewCount    Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([projectId])
+}
+
+model Annotation {
+  id          String    @id @default(cuid())
+  shareLinkId String
+  shareLink   ShareLink @relation(fields: [shareLinkId], references: [id], onDelete: Cascade)
+  // 3D position
+  posX        Float
+  posY        Float
+  posZ        Float
+  // Surface normal for pin orientation
+  normX       Float     @default(0)
+  normY       Float     @default(1)
+  normZ       Float     @default(0)
+  // Content
+  text        String
+  drawingData String?   // base64 image string for whiteboard drawing
+  author      String    @default("Anonymous")
+  index       Int       // sequential number (1, 2, 3...) per shareLink
+  isPinned    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+
+  @@index([shareLinkId])
+}
+
+model ChatMessage {
+  id          String    @id @default(cuid())
+  shareLinkId String
+  shareLink   ShareLink @relation(fields: [shareLinkId], references: [id], onDelete: Cascade)
+  text        String
+  author      String    @default("Anonymous")
+  createdAt   DateTime  @default(now())
+
+  @@index([shareLinkId])
+}

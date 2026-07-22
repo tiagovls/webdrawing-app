@@ -1,0 +1,103 @@
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+import { stripe } from "@/lib/stripe";
+import { prisma } from "@/lib/prisma";
+import Stripe from "stripe";
+
+export async function POST(req: Request) {
+  const body = await req.text();
+  const headersList = await headers();
+  const signature = headersList.get("Stripe-Signature") as string;
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+  } catch (error: any) {
+    console.error("WEBHOOK_ERROR:", error.message);
+    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+  }
+
+  const session = event.data.object as Stripe.Checkout.Session;
+
+  if (event.type === "checkout.session.completed") {
+    const subscription = await stripe.subscriptions.retrieve(
+      session.subscription as string
+    );
+
+    if (!session?.metadata?.userId) {
+      console.error("WEBHOOK_ERROR: No userId in session metadata");
+      return new NextResponse("Webhook Error: No userId", { status: 400 });
+    }
+
+    await prisma.user.update({
+      where: {
+        id: session.metadata.userId,
+      },
+      data: {
+        stripeSubscriptionId: subscription.id,
+        stripeCustomerId: subscription.customer as string,
+        stripePriceId: subscription.items.data[0].price.id,
+        stripeCurrentPeriodEnd: subscription.current_period_end 
+          ? new Date(subscription.current_period_end * 1000)
+          : null,
+      },
+    });
+  }
+
+  if (event.type === "invoice.payment_succeeded") {
+    const invoice = event.data.object as Stripe.Invoice;
+    if (invoice.subscription) {
+      const subscription = await stripe.subscriptions.retrieve(
+        invoice.subscription as string
+      );
+
+      await prisma.user.update({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+        data: {
+          stripePriceId: subscription.items.data[0].price.id,
+          stripeCurrentPeriodEnd: subscription.current_period_end
+            ? new Date(subscription.current_period_end * 1000)
+            : null,
+        },
+      });
+    }
+  }
+
+  if (event.type === "customer.subscription.deleted" || event.type === "customer.subscription.updated") {
+    const subscription = event.data.object as Stripe.Subscription;
+    
+    // Check if the user exists with this subscription id before updating
+    const dbUser = await prisma.user.findUnique({
+      where: { stripeSubscriptionId: subscription.id }
+    });
+    
+    if (dbUser) {
+      await prisma.user.update({
+        where: {
+          stripeSubscriptionId: subscription.id,
+        },
+        data: event.type === "customer.subscription.deleted" 
+          ? {
+              stripePriceId: null,
+              stripeSubscriptionId: null,
+              stripeCurrentPeriodEnd: null,
+            }
+          : {
+              stripePriceId: subscription.items?.data?.[0]?.price?.id ?? null,
+              stripeCurrentPeriodEnd: subscription.current_period_end
+                ? new Date(subscription.current_period_end * 1000)
+                : null,
+            },
+      });
+    }
+  }
+
+  return new NextResponse(null, { status: 200 });
+}
