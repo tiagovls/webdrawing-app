@@ -74,7 +74,7 @@ export default async function DashboardPage() {
           { label: 'Modèles uploadés', value: projects.length, icon: Box },
           {
             label: 'Liens de partage',
-            value: projects.reduce((a, p) => a + p.shareLinks.length, 0),
+            value: projects.reduce((a: number, p) => a + p.shareLinks.length, 0),
             icon: Share2,
           },
           { label: 'Vues totales', value: totalViews, icon: Eye },
