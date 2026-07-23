@@ -588,17 +588,27 @@ export default function ThreeViewer({
     if (measurePoints.length === 2) {
       const p1 = measurePoints[0].point
       const p2 = measurePoints[1].point
+      const dist = p1.distanceTo(p2)
       
       const w = canvasRef.current?.clientWidth || window.innerWidth
       const h = canvasRef.current?.clientHeight || window.innerHeight
 
       const geo = new LineGeometry()
       geo.setPositions([p1.x, p1.y, p1.z, p2.x, p2.y, p2.z])
-      const mat = new LineMaterial({ color: 0x22c55e, linewidth: 3, depthTest: false })
+      const mat = new LineMaterial({ color: 0x22c55e, linewidth: 4, depthTest: false })
       mat.resolution.set(w, h)
       const line = new Line2(geo, mat)
       line.renderOrder = 999
       group.add(line)
+
+      // Add 3D native Canvas Sprite distance badge right at 3D midpoint
+      const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5)
+      const box = modelRef.current ? new THREE.Box3().setFromObject(modelRef.current) : null
+      const maxDim = box ? box.getSize(new THREE.Vector3()).length() : 1
+
+      const textSprite = createDistanceSprite(displayDistance(dist), maxDim)
+      textSprite.position.copy(mid)
+      group.add(textSprite)
     }
   }, [measurePoints, measureType])
 
@@ -1105,6 +1115,54 @@ export default function ThreeViewer({
       <ViewCube onFaceClick={handleFaceClick} onDrag={handleCubeDrag} cubeRef={cubeRef} />
     </div>
   )
+}
+
+// Create native 3D Canvas Sprite badge for distance labels inside Three.js scene
+function createDistanceSprite(text: string, maxDim: number): THREE.Sprite {
+  const canvas = document.createElement('canvas')
+  canvas.width = 512
+  canvas.height = 128
+  const ctx = canvas.getContext('2d')
+  if (ctx) {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.98)'
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
+    ctx.shadowBlur = 10
+    ctx.shadowOffsetY = 4
+    ctx.beginPath()
+    if (typeof (ctx as any).roundRect === 'function') {
+      ;(ctx as any).roundRect(16, 16, 480, 96, 24)
+    } else {
+      ctx.rect(16, 16, 480, 96)
+    }
+    ctx.fill()
+
+    ctx.strokeStyle = '#22c55e'
+    ctx.lineWidth = 6
+    ctx.stroke()
+
+    ctx.fillStyle = '#15803d'
+    ctx.font = 'bold 44px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(text, 256, 64)
+  }
+
+  const texture = new THREE.CanvasTexture(canvas)
+  texture.needsUpdate = true
+
+  const spriteMat = new THREE.SpriteMaterial({
+    map: texture,
+    depthTest: false,
+    depthWrite: false,
+    transparent: true,
+  })
+
+  const sprite = new THREE.Sprite(spriteMat)
+  sprite.renderOrder = 1000
+  const aspect = 512 / 128
+  const heightScale = Math.max(0.015, maxDim * 0.08)
+  sprite.scale.set(heightScale * aspect, heightScale, 1)
+  return sprite
 }
 
 // Collect all Object3Ds with a name (for mesh hierarchy panel)
