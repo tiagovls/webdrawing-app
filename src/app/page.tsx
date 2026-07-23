@@ -82,8 +82,6 @@ export default function LandingPage() {
   const { isSignedIn } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [showMobileCta, setShowMobileCta] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
   const heroVideoRef = useRef<HTMLVideoElement>(null)
 
   // Force autoplay on mobile browsers after refresh
@@ -99,22 +97,12 @@ export default function LandingPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      setScrolled(currentScrollY > 50)
-
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        // Scrolling down -> hide button on phone
-        setShowMobileCta(false)
-      } else {
-        // Scrolling up -> show button on phone
-        setShowMobileCta(true)
-      }
-      setLastScrollY(currentScrollY)
+      setScrolled(window.scrollY > 50)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+  }, [])
 
   return (
     <div className="relative min-h-screen font-sans flex flex-col bg-surface-50 text-dark-900">
@@ -554,11 +542,7 @@ export default function LandingPage() {
       </main>
 
       {/* ── Mobile Floating CTA ───────────────────────────────────────── */}
-      <div
-        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-40 md:hidden transition-all duration-300 transform ${
-          showMobileCta ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0 pointer-events-none'
-        }`}
-      >
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 md:hidden">
         <Link
           href={isSignedIn ? "/dashboard" : "#pricing"}
           className="flex items-center gap-2 bg-[#2A4C2E] text-white px-6 py-3 rounded-full font-medium text-sm shadow-xl hover:bg-[#203a23] active:scale-95 transition-all border border-white/20"

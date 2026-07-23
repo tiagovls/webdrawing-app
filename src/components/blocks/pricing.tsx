@@ -54,7 +54,7 @@ export function Pricing() {
   ];
 
   const [tIndex, setTIndex] = useState(0);
-  const [isAnnual, setIsAnnual] = useState(true);
+  const [isAnnual, setIsAnnual] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { isSignedIn, getToken, isLoaded, userId } = useAuth();
