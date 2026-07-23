@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import Stripe from "stripe";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
@@ -12,27 +12,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized - Not logged in" }, { status: 401 });
     }
 
-    // Fetch user from Clerk REST API
-    const clerkRes = await fetch(`https://api.clerk.com/v1/users/${userId}`, {
-      headers: { Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}` },
-    });
+    const user = await currentUser();
 
-    if (!clerkRes.ok) {
-      console.error("Clerk REST API Error:", await clerkRes.text());
+    if (!user) {
       return NextResponse.json({ error: "User data missing from Clerk" }, { status: 500 });
     }
-
-    const user = await clerkRes.json();
 
     const body = await req.json();
     const { priceId } = body;
 
-    if (!priceId) {
-      return NextResponse.json({ error: "Price ID is required" }, { status: 400 });
+    if (!priceId || priceId === "undefined") {
+      return NextResponse.json({ error: "Price ID is missing. Please check NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID and NEXT_PUBLIC_STRIPE_ANNUAL_PRICE_ID in Vercel environment variables." }, { status: 400 });
     }
 
-    const email: string = user.email_addresses?.[0]?.email_address || "";
-    const name: string | null = `${user.first_name || ""} ${user.last_name || ""}`.trim() || null;
+    const email: string = user.emailAddresses?.[0]?.emailAddress || "";
+    const name: string | null = `${user.firstName || ""} ${user.lastName || ""}`.trim() || null;
 
     const dbUser = await prisma.user.upsert({
       where: { id: userId },
@@ -40,7 +34,7 @@ export async function POST(req: Request) {
       create: { id: userId, email, name },
     });
 
-    const host = req.headers.get("host") || "localhost:3000";
+    const host = req.headers.get("host") || "webdrawing.fr";
     const protocol = host.startsWith("localhost") || host.match(/^\d+\.\d+\.\d+\.\d+/) ? "http" : "https";
     const baseUrl = `${protocol}://${host}`;
 
@@ -77,8 +71,9 @@ export async function POST(req: Request) {
     const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return NextResponse.json({ url: session.url });
-  } catch (error) {
-    console.error("STRIPE_CHECKOUT_ERROR", error);
-    return NextResponse.json({ error: "Internal Error" }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : "Internal Error";
+    console.error("STRIPE_CHECKOUT_ERROR:", errorMsg);
+    return NextResponse.json({ error: errorMsg }, { status: 500 });
   }
 }
