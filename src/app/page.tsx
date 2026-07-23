@@ -547,7 +547,7 @@ export default function LandingPage() {
           href={isSignedIn ? "/dashboard" : "#pricing"}
           className="flex items-center gap-2 bg-[#2A4C2E] text-white px-6 py-3 rounded-full font-medium text-sm shadow-xl hover:bg-[#203a23] active:scale-95 transition-all border border-white/20"
         >
-          <span>Try now for free</span>
+          <span>{isSignedIn ? "Go to Dashboard" : "Try now for free"}</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
