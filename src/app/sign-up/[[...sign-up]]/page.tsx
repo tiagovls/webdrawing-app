@@ -26,7 +26,7 @@ export default function SignUpPage() {
         <span className="font-semibold text-lg text-dark-900">WebDrawing</span>
       </Link>
       <div className="relative z-10">
-        <SignUp appearance={{ variables: { colorPrimary: '#2A4B26' } }} />
+        <SignUp path="/sign-up" routing="path" appearance={{ variables: { colorPrimary: '#2A4B26' } }} />
       </div>
     </div>
   )

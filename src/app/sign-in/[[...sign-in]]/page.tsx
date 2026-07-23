@@ -25,7 +25,7 @@ export default function SignInPage() {
         <span className="font-semibold text-lg text-dark-900">WebDrawing</span>
       </Link>
       <div className="relative z-10">
-        <SignIn appearance={{ variables: { colorPrimary: '#2A4B26' } }} />
+        <SignIn path="/sign-in" routing="path" appearance={{ variables: { colorPrimary: '#2A4B26' } }} />
       </div>
     </div>
   )
