@@ -388,10 +388,10 @@ export default function ViewerShell({
           href="https://webdrawing.fr"
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute bottom-4 right-4 md:right-6 z-10 flex items-center gap-1.5 px-3 py-1.5 bg-white/50 backdrop-blur-md rounded-full shadow-sm border border-surface-200/50 text-[10px] font-medium text-dark-600 hover:text-brand-600 hover:bg-white/80 transition-all pointer-events-auto"
+          className="absolute bottom-4 right-4 md:right-6 z-10 flex items-center gap-1.5 px-3 py-1.5 bg-white/70 backdrop-blur-md rounded-full shadow-sm border border-surface-200/60 text-[11px] font-medium text-dark-600 hover:text-brand-600 hover:bg-white/90 hover:scale-105 transition-all pointer-events-auto"
         >
           <span className="opacity-70">Managed by</span>
-          <span className="font-bold text-dark-900">Web Drawing</span>
+          <span className="font-bold text-brand-600">webdrawing.fr</span>
         </a>
 
         {/* Annotation placement dialog */}
