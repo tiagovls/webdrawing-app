@@ -64,7 +64,7 @@ export default function ViewerShell({
   const [annotations, setAnnotations] = useState<Annotation[]>(initialAnnotations)
   const [meshList, setMeshList] = useState<MeshItem[]>([])
   const [meshVisibility, setMeshVisibility] = useState<Record<string, boolean>>({})
-  const [rightPanel, setRightPanel] = useState<'annotations' | 'hierarchy' | 'chat' | null>('chat')
+  const [rightPanel, setRightPanel] = useState<'annotations' | 'hierarchy' | 'chat' | null>(null)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [viewerBg, setViewerBg] = useState<'gray'|'white'|'black'|'beige'>('gray')

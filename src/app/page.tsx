@@ -244,7 +244,7 @@ export default function LandingPage() {
       </nav>
 
       {/* ── Hero Section with Video Background ──────────────────────── */}
-      <section className="relative flex items-center justify-center min-h-[90vh] pt-32 pb-24 overflow-hidden rounded-b-[3rem] shadow-2xl mb-12">
+      <section className="relative flex items-center justify-center min-h-[85vh] pt-28 pb-16 overflow-hidden rounded-b-[3rem] shadow-2xl mb-12">
         {/* Video Background */}
         <div className="absolute inset-0 z-0">
           <video
@@ -275,7 +275,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white text-xs font-medium mb-8">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white text-xs font-medium mb-4">
               <span className="flex gap-1 text-accent-500">
                 <Star className="w-3.5 h-3.5 fill-current" />
                 <Star className="w-3.5 h-3.5 fill-current" />
@@ -286,21 +286,21 @@ export default function LandingPage() {
               Trusted by 500+ mechanical engineers
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-6 drop-shadow-lg">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight mb-4 drop-shadow-lg">
               Get Client Approvals on 3D Models Faster,{' '}
-              <span className="text-accent-500 block mt-2">Without Sending Heavy CAD Files</span>
+              <span className="text-accent-500 block mt-1">Without Sending Heavy CAD Files</span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow">
+            <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto mb-6 leading-relaxed drop-shadow">
               Share, review, and annotate 3D assemblies directly in the browser via a single link. Zero installations, zero friction.
             </p>
 
-            <div className="flex flex-col items-center justify-center gap-2 w-full px-4 sm:px-0">
+            <div className="flex flex-col items-center justify-center gap-3 w-full px-4 sm:px-0">
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 {isSignedIn ? (
                   <Link
                     href="/dashboard"
-                    className="group inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5 text-lg"
+                    className="group inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-lg hover:-translate-y-0.5 text-lg"
                   >
                     Go to Dashboard
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
@@ -308,20 +308,20 @@ export default function LandingPage() {
                 ) : (
                   <Link
                     href="/sign-up"
-                    className="group inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5 text-lg"
+                    className="group inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-lg hover:-translate-y-0.5 text-lg"
                   >
                     Start for free
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                   </Link>
                 )}
               </div>
-              <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#bbf7d0] border border-green-300 text-dark-900 font-bold text-sm shadow-md animate-bounce">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-[#bbf7d0] border border-green-300 text-dark-900 font-bold text-xs sm:text-sm shadow-md animate-bounce">
                 <Smartphone className="w-4 h-4 text-brand-600" />
                 <span>100% Compatible Mobile & Smartphone (iPhone / Android)</span>
               </div>
-              <p className="text-white/90 text-sm mt-1 flex flex-col sm:flex-row items-center gap-1.5 font-medium">
-                <CheckCircle2 className="w-4 h-4 text-accent-500" />
-                No plugin required. Opens instantly on any device.
+              <p className="text-white/90 text-xs sm:text-sm flex items-center gap-1.5 font-medium">
+                <CheckCircle2 className="w-4 h-4 text-accent-500 shrink-0" />
+                <span>No plugin required. Opens instantly on any device.</span>
               </p>
             </div>
           </motion.div>

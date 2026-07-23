@@ -123,7 +123,7 @@ export default function ViewerGate({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Mot de passe"
-              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-white text-dark-900 placeholder:text-dark-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 text-sm shadow-sm"
+              className="w-full px-4 py-3 rounded-xl border border-surface-200 bg-white text-dark-900 placeholder:text-dark-500 focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 text-base shadow-sm"
             />
             {passwordError && (
               <div className="flex items-center gap-2 text-red-600 text-xs">
