@@ -15,12 +15,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-  // Increase body size limit for API routes (metadata, not file upload which goes directly to R2)
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '1mb',
-    },
-  },
 }
 
 export default nextConfig
