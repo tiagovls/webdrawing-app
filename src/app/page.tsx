@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
@@ -84,6 +84,18 @@ export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showMobileCta, setShowMobileCta] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const heroVideoRef = useRef<HTMLVideoElement>(null)
+
+  // Force autoplay on mobile browsers after refresh
+  useEffect(() => {
+    const video = heroVideoRef.current
+    if (video) {
+      video.muted = true
+      video.play().catch((err: unknown) => {
+        console.warn('Hero video autoplay blocked on mobile:', err)
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -211,6 +223,7 @@ export default function LandingPage() {
         {/* Video Background */}
         <div className="absolute inset-0 z-0">
           <video
+            ref={heroVideoRef}
             src="/hero-bg.mp4"
             autoPlay
             loop

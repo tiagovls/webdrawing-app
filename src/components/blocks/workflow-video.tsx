@@ -1,11 +1,22 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Lock } from 'lucide-react'
 
 export function WorkflowVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [progress, setProgress] = useState(0)
+
+  // Force muted property and play() for mobile Safari/Chrome autoplay policy on refresh
+  useEffect(() => {
+    const video = videoRef.current
+    if (video) {
+      video.muted = true
+      video.play().catch((err) => {
+        console.warn('Mobile video autoplay blocked:', err)
+      })
+    }
+  }, [])
 
   // Update progress as video plays
   const handleTimeUpdate = () => {
