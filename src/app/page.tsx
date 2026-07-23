@@ -248,7 +248,6 @@ export default function LandingPage() {
         <div className="absolute inset-0 z-0">
           <video
             ref={heroVideoRef}
-            src="/hero-bg.mp4"
             autoPlay
             loop
             muted
@@ -256,12 +255,15 @@ export default function LandingPage() {
             preload="auto"
             onLoadedData={() => {
               if (heroVideoRef.current) {
+                heroVideoRef.current.defaultMuted = true
                 heroVideoRef.current.muted = true
                 heroVideoRef.current.play().catch(() => {})
               }
             }}
-            className="w-full h-full object-cover"
-          />
+            className="w-full h-full object-cover pointer-events-none"
+          >
+            <source src="/hero-bg.mp4" type="video/mp4" />
+          </video>
           {/* Dark Overlay for text readability */}
           <div className="absolute inset-0 bg-black/60" />
         </div>

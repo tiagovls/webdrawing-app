@@ -86,7 +86,6 @@ export function WorkflowVideo() {
         <div className="absolute inset-0 bg-dark-900/5 pointer-events-none group-hover:bg-transparent transition-colors z-10" />
         <video 
           ref={videoRef}
-          src="/workflow.mp4" 
           autoPlay 
           loop 
           muted 
@@ -94,13 +93,16 @@ export function WorkflowVideo() {
           preload="auto"
           onLoadedData={() => {
             if (videoRef.current) {
+              videoRef.current.defaultMuted = true
               videoRef.current.muted = true
               videoRef.current.play().catch(() => {})
             }
           }}
           onTimeUpdate={handleTimeUpdate}
           className="w-full h-auto block"
-        />
+        >
+          <source src="/workflow.mp4" type="video/mp4" />
+        </video>
       </div>
         
       {/* Aesthetic Progress Bar */}
