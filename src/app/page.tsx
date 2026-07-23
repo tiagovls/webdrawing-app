@@ -26,6 +26,7 @@ import { WorkflowVideo } from '@/components/blocks/workflow-video'
 import { ClientUserButton } from '@/components/ClientUserButton'
 import FAQAccordion from '@/components/ui/accordion-2'
 import { MagicText } from '@/components/ui/magic-text'
+import { getUserPlan } from '@/app/actions'
 
 const features = [
   {
@@ -79,10 +80,21 @@ const FadeUp = ({ children, delay = 0, className = "" }: { children: React.React
 )
 
 export default function LandingPage() {
-  const { isSignedIn } = useAuth()
+  const { isSignedIn, isLoaded, userId } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [plan, setPlan] = useState<'Free' | 'Pro' | null>(null)
   const heroVideoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    async function fetchPlan() {
+      if (isLoaded && userId) {
+        const data = await getUserPlan(userId)
+        setPlan(data.plan as 'Free' | 'Pro')
+      }
+    }
+    fetchPlan()
+  }, [isLoaded, userId])
 
   // Force autoplay on mobile browsers after refresh
   useEffect(() => {
@@ -541,16 +553,18 @@ export default function LandingPage() {
 
       </main>
 
-      {/* ── Mobile Floating CTA ───────────────────────────────────────── */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 md:hidden">
-        <Link
-          href={isSignedIn ? "/dashboard" : "#pricing"}
-          className="flex items-center gap-2 bg-[#2A4C2E] text-white px-6 py-3 rounded-full font-medium text-sm shadow-xl hover:bg-[#203a23] active:scale-95 transition-all border border-white/20"
-        >
-          <span>{isSignedIn ? "Go to Dashboard" : "Try now for free"}</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
+      {/* ── Mobile Floating CTA (Hidden for Pro users) ─────────────────── */}
+      {plan !== "Pro" && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 md:hidden">
+          <Link
+            href="#pricing"
+            className="flex items-center gap-2 bg-[#2A4C2E] text-white px-6 py-3 rounded-full font-medium text-sm shadow-xl hover:bg-[#203a23] active:scale-95 transition-all border border-white/20"
+          >
+            <span>Try now for free</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      )}
 
       {/* ── Footer ────────────────────────────────────────────────────── */}
       <footer className="bg-[#2A4C2E] text-white py-8 px-6 mt-24 rounded-t-3xl">
