@@ -7,14 +7,38 @@ export function WorkflowVideo() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [progress, setProgress] = useState(0)
 
-  // Force muted property and play() for mobile Safari/Chrome autoplay policy on refresh
+  // Robust Safari & Mobile Autoplay handler
   useEffect(() => {
     const video = videoRef.current
-    if (video) {
+    if (!video) return
+
+    const playVideo = () => {
       video.muted = true
-      video.play().catch((err) => {
-        console.warn('Mobile video autoplay blocked:', err)
-      })
+      video.defaultMuted = true
+      video.setAttribute('playsinline', 'true')
+      video.setAttribute('webkit-playsinline', 'true')
+      video.play().catch(() => {})
+    }
+
+    playVideo()
+
+    video.addEventListener('loadeddata', playVideo)
+    video.addEventListener('canplay', playVideo)
+
+    const handleInteraction = () => {
+      if (video.paused) {
+        playVideo()
+      }
+    }
+
+    window.addEventListener('touchstart', handleInteraction, { passive: true, once: true })
+    window.addEventListener('scroll', handleInteraction, { passive: true, once: true })
+
+    return () => {
+      video.removeEventListener('loadeddata', playVideo)
+      video.removeEventListener('canplay', playVideo)
+      window.removeEventListener('touchstart', handleInteraction)
+      window.removeEventListener('scroll', handleInteraction)
     }
   }, [])
 
@@ -67,6 +91,13 @@ export function WorkflowVideo() {
           loop 
           muted 
           playsInline 
+          preload="auto"
+          onLoadedData={() => {
+            if (videoRef.current) {
+              videoRef.current.muted = true
+              videoRef.current.play().catch(() => {})
+            }
+          }}
           onTimeUpdate={handleTimeUpdate}
           className="w-full h-auto block"
         />

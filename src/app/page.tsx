@@ -96,14 +96,38 @@ export default function LandingPage() {
     fetchPlan()
   }, [isLoaded, userId])
 
-  // Force autoplay on mobile browsers after refresh
+  // Robust Safari & Mobile Autoplay handler
   useEffect(() => {
     const video = heroVideoRef.current
-    if (video) {
+    if (!video) return
+
+    const playVideo = () => {
       video.muted = true
-      video.play().catch((err: unknown) => {
-        console.warn('Hero video autoplay blocked on mobile:', err)
-      })
+      video.defaultMuted = true
+      video.setAttribute('playsinline', 'true')
+      video.setAttribute('webkit-playsinline', 'true')
+      video.play().catch(() => {})
+    }
+
+    playVideo()
+
+    video.addEventListener('loadeddata', playVideo)
+    video.addEventListener('canplay', playVideo)
+
+    const handleInteraction = () => {
+      if (video.paused) {
+        playVideo()
+      }
+    }
+
+    window.addEventListener('touchstart', handleInteraction, { passive: true, once: true })
+    window.addEventListener('scroll', handleInteraction, { passive: true, once: true })
+
+    return () => {
+      video.removeEventListener('loadeddata', playVideo)
+      video.removeEventListener('canplay', playVideo)
+      window.removeEventListener('touchstart', handleInteraction)
+      window.removeEventListener('scroll', handleInteraction)
     }
   }, [])
 
@@ -229,6 +253,13 @@ export default function LandingPage() {
             loop
             muted
             playsInline
+            preload="auto"
+            onLoadedData={() => {
+              if (heroVideoRef.current) {
+                heroVideoRef.current.muted = true
+                heroVideoRef.current.play().catch(() => {})
+              }
+            }}
             className="w-full h-full object-cover"
           />
           {/* Dark Overlay for text readability */}
