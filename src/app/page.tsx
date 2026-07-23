@@ -19,6 +19,7 @@ import {
   Star,
   Quote,
   Lock,
+  Smartphone,
 } from 'lucide-react'
 import { Pricing } from '@/components/blocks/pricing'
 import { PlanBadge } from '@/components/blocks/plan-badge'
@@ -29,6 +30,11 @@ import { MagicText } from '@/components/ui/magic-text'
 import { getUserPlan } from '@/app/actions'
 
 const features = [
+  {
+    icon: Smartphone,
+    title: '100% Smartphone & Tablet Compatible',
+    desc: <>Your clients open and view 3D models <span className="bg-[#bbf7d0] px-2 py-0.5 rounded text-dark-900 font-bold shadow-sm inline-block">directly on iPhone & Android</span> without installing any app or plugin.</>,
+  },
   {
     icon: Share2,
     title: 'Zero friction sharing',
@@ -53,11 +59,6 @@ const features = [
     icon: Eye,
     title: 'Navigate full assemblies easily',
     desc: <>Navigate the model tree. <span className="text-brand-600 font-semibold">Show/hide each sub-component</span> independently.</>,
-  },
-  {
-    icon: Share2,
-    title: 'Share anywhere with one link',
-    desc: <>Generate a unique URL in one click. Share via <span className="text-brand-600 font-semibold">email, Slack or Teams</span>.</>,
   },
 ]
 
@@ -314,9 +315,13 @@ export default function LandingPage() {
                   </Link>
                 )}
               </div>
+              <div className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#bbf7d0] border border-green-300 text-dark-900 font-bold text-sm shadow-md animate-bounce">
+                <Smartphone className="w-4 h-4 text-brand-600" />
+                <span>100% Compatible Mobile & Smartphone (iPhone / Android)</span>
+              </div>
               <p className="text-white/90 text-sm mt-1 flex flex-col sm:flex-row items-center gap-1.5 font-medium">
                 <CheckCircle2 className="w-4 h-4 text-accent-500" />
-                No plugin required. Opens instantly on any device, even smartphones.
+                No plugin required. Opens instantly on any device.
               </p>
             </div>
           </motion.div>

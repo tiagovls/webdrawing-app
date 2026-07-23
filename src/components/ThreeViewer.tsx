@@ -220,8 +220,14 @@ export default function ThreeViewer({
         const bottom = box.min.y - center.y
         grid.position.y = bottom
 
-        // Fit camera
-        const distance = maxDim * 2
+        // Fit camera considering both horizontal and vertical FOV (essential for mobile portrait screens)
+        const fovRad = (camera.fov * Math.PI) / 180
+        const aspect = camera.aspect
+        const hFovRad = 2 * Math.atan(Math.tan(fovRad / 2) * aspect)
+        const effectiveFovRad = aspect < 1 ? hFovRad : fovRad
+        const fitDistance = (maxDim / 2) / Math.sin(effectiveFovRad / 2)
+        const distance = fitDistance * 1.5
+
         camera.position.set(distance, distance * 0.5, distance)
         camera.near = maxDim * 0.001
         camera.far = maxDim * 100
