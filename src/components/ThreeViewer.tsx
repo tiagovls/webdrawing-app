@@ -180,20 +180,21 @@ export default function ThreeViewer({
     controls.maxDistance = 500
     controlsRef.current = controls
 
+    const updateSpriteScale = () => {
+      const group = pointsGroupRef.current
+      if (!group || !cameraRef.current) return
+      group.traverse((child) => {
+        if (child instanceof THREE.Sprite && child.name === 'distanceSprite') {
+          const distToCam = cameraRef.current!.position.distanceTo(child.position)
+          const heightScale = distToCam * 0.035
+          const aspect = 512 / 128
+          child.scale.set(heightScale * aspect, heightScale, 1)
+        }
+      })
+    }
+
     const handleControlsChange = () => {
-      if (measurePointsRef.current.length === 2 && cameraRef.current && canvasRef.current) {
-        const c = canvasRef.current
-        const rect = c.getBoundingClientRect()
-        const pt1 = measurePointsRef.current[0].point.clone().project(cameraRef.current)
-        const pt2 = measurePointsRef.current[1].point.clone().project(cameraRef.current)
-
-        const s1 = { x: ((pt1.x + 1) / 2) * rect.width, y: ((-pt1.y + 1) / 2) * rect.height }
-        const s2 = { x: ((pt2.x + 1) / 2) * rect.width, y: ((-pt2.y + 1) / 2) * rect.height }
-        const mid = { x: (s1.x + s2.x) / 2, y: (s1.y + s2.y) / 2 }
-        const dist = measurePointsRef.current[0].point.distanceTo(measurePointsRef.current[1].point)
-
-        setLivePointMeasure({ p1: s1, p2: s2, mid, distance: dist })
-      }
+      updateSpriteScale()
     }
     controls.addEventListener('change', handleControlsChange)
 
@@ -314,27 +315,11 @@ export default function ThreeViewer({
     const animate = () => {
       frameRef.current = requestAnimationFrame(animate)
       controls.update()
+      updateSpriteScale()
       renderer.render(scene, camera)
 
       if (cubeRef.current) {
         cubeRef.current.style.transform = `rotateX(${controls.getPolarAngle() - Math.PI/2}rad) rotateY(${-controls.getAzimuthalAngle()}rad)`
-      }
-
-      // Live 3D point measure projection on camera orbit/move
-      if (measurePointsRef.current.length === 2 && cameraRef.current && canvasRef.current) {
-        const c = canvasRef.current
-        const rect = c.getBoundingClientRect()
-        const pt1 = measurePointsRef.current[0].point.clone().project(cameraRef.current)
-        const pt2 = measurePointsRef.current[1].point.clone().project(cameraRef.current)
-
-        const s1 = { x: ((pt1.x + 1) / 2) * rect.width, y: ((-pt1.y + 1) / 2) * rect.height }
-        const s2 = { x: ((pt2.x + 1) / 2) * rect.width, y: ((-pt2.y + 1) / 2) * rect.height }
-        const mid = { x: (s1.x + s2.x) / 2, y: (s1.y + s2.y) / 2 }
-        const dist = measurePointsRef.current[0].point.distanceTo(measurePointsRef.current[1].point)
-
-        setLivePointMeasure({ p1: s1, p2: s2, mid, distance: dist })
-      } else {
-        setLivePointMeasure(null)
       }
     }
     animate()
@@ -578,7 +563,7 @@ export default function ThreeViewer({
 
     measurePoints.forEach(mp => {
       const sphereGeo = new THREE.SphereGeometry(0.0015, 16, 16)
-      const sphereMat = new THREE.MeshBasicMaterial({ color: 0x22c55e, depthTest: false })
+      const sphereMat = new THREE.MeshBasicMaterial({ color: 0x2A4B26, depthTest: false })
       const sphere = new THREE.Mesh(sphereGeo, sphereMat)
       sphere.renderOrder = 999
       sphere.position.copy(mp.point)
@@ -595,7 +580,7 @@ export default function ThreeViewer({
 
       const geo = new LineGeometry()
       geo.setPositions([p1.x, p1.y, p1.z, p2.x, p2.y, p2.z])
-      const mat = new LineMaterial({ color: 0x22c55e, linewidth: 4, depthTest: false })
+      const mat = new LineMaterial({ color: 0x2A4B26, linewidth: 4, depthTest: false })
       mat.resolution.set(w, h)
       const line = new Line2(geo, mat)
       line.renderOrder = 999
@@ -603,10 +588,8 @@ export default function ThreeViewer({
 
       // Add 3D native Canvas Sprite distance badge right at 3D midpoint
       const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5)
-      const box = modelRef.current ? new THREE.Box3().setFromObject(modelRef.current) : null
-      const maxDim = box ? box.getSize(new THREE.Vector3()).length() : 1
 
-      const textSprite = createDistanceSprite(displayDistance(dist), maxDim)
+      const textSprite = createDistanceSprite(displayDistance(dist))
       textSprite.position.copy(mid)
       group.add(textSprite)
     }
@@ -1091,15 +1074,16 @@ export default function ThreeViewer({
 }
 
 // Create native 3D Canvas Sprite badge for distance labels inside Three.js scene
-function createDistanceSprite(text: string, maxDim: number): THREE.Sprite {
+function createDistanceSprite(text: string): THREE.Sprite {
   const canvas = document.createElement('canvas')
   canvas.width = 512
   canvas.height = 128
   const ctx = canvas.getContext('2d')
   if (ctx) {
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.98)'
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.15)'
-    ctx.shadowBlur = 10
+    // Brand favicon green background pill
+    ctx.fillStyle = '#2A4B26'
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.35)'
+    ctx.shadowBlur = 12
     ctx.shadowOffsetY = 4
     ctx.beginPath()
     if (typeof (ctx as any).roundRect === 'function') {
@@ -1109,12 +1093,14 @@ function createDistanceSprite(text: string, maxDim: number): THREE.Sprite {
     }
     ctx.fill()
 
-    ctx.strokeStyle = '#22c55e'
+    // Crisp white border
+    ctx.strokeStyle = '#ffffff'
     ctx.lineWidth = 6
     ctx.stroke()
 
-    ctx.fillStyle = '#15803d'
-    ctx.font = 'bold 44px sans-serif'
+    // High contrast white text
+    ctx.fillStyle = '#ffffff'
+    ctx.font = 'bold 46px Inter, sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillText(text, 256, 64)
@@ -1131,10 +1117,8 @@ function createDistanceSprite(text: string, maxDim: number): THREE.Sprite {
   })
 
   const sprite = new THREE.Sprite(spriteMat)
+  sprite.name = 'distanceSprite'
   sprite.renderOrder = 1000
-  const aspect = 512 / 128
-  const heightScale = Math.max(0.006, maxDim * 0.025)
-  sprite.scale.set(heightScale * aspect, heightScale, 1)
   return sprite
 }
 
