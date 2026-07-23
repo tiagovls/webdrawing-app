@@ -955,34 +955,7 @@ export default function ThreeViewer({
         </button>
       ))}
 
-      {/* Point Measure SVG Line & Sticky Distance Label */}
-      {mode === 'measure' && measureType === 'point' && livePointMeasure && (
-        <>
-          <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-            <line
-              x1={livePointMeasure.p1.x}
-              y1={livePointMeasure.p1.y}
-              x2={livePointMeasure.p2.x}
-              y2={livePointMeasure.p2.y}
-              stroke="#22c55e"
-              strokeWidth="2.5"
-              strokeDasharray="4 4"
-            />
-            <circle cx={livePointMeasure.p1.x} cy={livePointMeasure.p1.y} r="5" fill="#22c55e" stroke="#ffffff" strokeWidth="2" />
-            <circle cx={livePointMeasure.p2.x} cy={livePointMeasure.p2.y} r="5" fill="#22c55e" stroke="#ffffff" strokeWidth="2" />
-          </svg>
-          <div
-            className="absolute pointer-events-none z-20 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-surface-200 text-brand-600 font-bold text-sm transition-all duration-75"
-            style={{
-              left: livePointMeasure.mid.x,
-              top: livePointMeasure.mid.y - 24,
-              transform: 'translateX(-50%)',
-            }}
-          >
-            {displayDistance(livePointMeasure.distance)}
-          </div>
-        </>
-      )}
+
 
       {/* Advanced Measure Overlay */}
       {mode === 'measure' && measureType === 'face' && selectedEntities.length > 0 && (
@@ -1160,7 +1133,7 @@ function createDistanceSprite(text: string, maxDim: number): THREE.Sprite {
   const sprite = new THREE.Sprite(spriteMat)
   sprite.renderOrder = 1000
   const aspect = 512 / 128
-  const heightScale = Math.max(0.015, maxDim * 0.08)
+  const heightScale = Math.max(0.006, maxDim * 0.025)
   sprite.scale.set(heightScale * aspect, heightScale, 1)
   return sprite
 }
