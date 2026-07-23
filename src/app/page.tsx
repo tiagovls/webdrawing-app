@@ -32,8 +32,8 @@ import { getUserPlan } from '@/app/actions'
 const features = [
   {
     icon: Smartphone,
-    title: '100% Smartphone & Tablet Compatible',
-    desc: <>Your clients open and view 3D models <span className="bg-[#bbf7d0] px-2 py-0.5 rounded text-dark-900 font-bold shadow-sm inline-block">directly on iPhone & Android</span> without installing any app or plugin.</>,
+    title: '100% Mobile & Tablet Compatible',
+    desc: <>Your clients open and view 3D models <span className="bg-[#bbf7d0]/40 px-1.5 py-0.5 rounded text-dark-900 font-medium">directly on iOS & Android devices</span> without installing any app or plugin.</>,
   },
   {
     icon: Share2,
@@ -315,9 +315,9 @@ export default function LandingPage() {
                   </Link>
                 )}
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-[#bbf7d0] border border-green-300 text-dark-900 font-bold text-xs sm:text-sm shadow-md animate-bounce">
-                <Smartphone className="w-4 h-4 text-brand-600" />
-                <span>100% Compatible Mobile & Smartphone (iPhone / Android)</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs sm:text-sm font-semibold backdrop-blur-md shadow-sm">
+                <Smartphone className="w-4 h-4 text-emerald-400" />
+                <span>100% Mobile & Tablet Compatible (iOS & Android)</span>
               </div>
               <p className="text-white/90 text-xs sm:text-sm flex items-center gap-1.5 font-medium">
                 <CheckCircle2 className="w-4 h-4 text-accent-500 shrink-0" />

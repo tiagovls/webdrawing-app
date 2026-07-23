@@ -9,6 +9,7 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import type { Annotation } from '@/lib/prisma'
 import { ViewCube, type ViewCubeFace } from './ViewCube'
+import { ChevronDown, ChevronUp, Ruler } from 'lucide-react'
 
 export type ViewerMode = 'orbit' | 'annotate' | 'measure'
 export type MeasureUnit = 'mm' | 'inch'
@@ -110,6 +111,17 @@ export default function ThreeViewer({
   // Mode effectstate
   const [selectedEntities, setSelectedEntities] = useState<SelectedEntity[]>([])
   const [measurePoints, setMeasurePoints] = useState<MeasurePoint[]>([])
+  const measurePointsRef = useRef<MeasurePoint[]>(measurePoints)
+  measurePointsRef.current = measurePoints
+
+  const [livePointMeasure, setLivePointMeasure] = useState<{
+    p1: { x: number; y: number }
+    p2: { x: number; y: number }
+    mid: { x: number; y: number }
+    distance: number
+  } | null>(null)
+
+  const [isDetailsCollapsed, setIsDetailsCollapsed] = useState(false)
   const [measureType, setMeasureType] = useState<'face' | 'point'>('face')
   const highlightsGroupRef = useRef<THREE.Group>(new THREE.Group())
   const pointsGroupRef = useRef<THREE.Group>(new THREE.Group())
@@ -289,6 +301,23 @@ export default function ThreeViewer({
 
       if (cubeRef.current) {
         cubeRef.current.style.transform = `rotateX(${controls.getPolarAngle() - Math.PI/2}rad) rotateY(${-controls.getAzimuthalAngle()}rad)`
+      }
+
+      // Live 3D point measure projection on camera orbit/move
+      if (measurePointsRef.current.length === 2 && cameraRef.current && canvasRef.current) {
+        const c = canvasRef.current
+        const rect = c.getBoundingClientRect()
+        const pt1 = measurePointsRef.current[0].point.clone().project(cameraRef.current)
+        const pt2 = measurePointsRef.current[1].point.clone().project(cameraRef.current)
+
+        const s1 = { x: ((pt1.x + 1) / 2) * rect.width, y: ((-pt1.y + 1) / 2) * rect.height }
+        const s2 = { x: ((pt2.x + 1) / 2) * rect.width, y: ((-pt2.y + 1) / 2) * rect.height }
+        const mid = { x: (s1.x + s2.x) / 2, y: (s1.y + s2.y) / 2 }
+        const dist = measurePointsRef.current[0].point.distanceTo(measurePointsRef.current[1].point)
+
+        setLivePointMeasure({ p1: s1, p2: s2, mid, distance: dist })
+      } else {
+        setLivePointMeasure(null)
       }
     }
     animate()
@@ -899,88 +928,123 @@ export default function ThreeViewer({
         </button>
       ))}
 
-      {/* Point Measure label */}
-      {measureType === 'point' && measureDistance !== null && measureMidScreen && (
-        <div
-          className="absolute pointer-events-none z-20 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-md border border-surface-200 text-brand-600 font-bold text-sm"
-          style={{
-            left: measureMidScreen.x,
-            top: measureMidScreen.y - 20,
-            transform: 'translateX(-50%)',
-          }}
-        >
-          {displayDistance(measureDistance)}
-        </div>
+      {/* Point Measure SVG Line & Sticky Distance Label */}
+      {mode === 'measure' && measureType === 'point' && livePointMeasure && (
+        <>
+          <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+            <line
+              x1={livePointMeasure.p1.x}
+              y1={livePointMeasure.p1.y}
+              x2={livePointMeasure.p2.x}
+              y2={livePointMeasure.p2.y}
+              stroke="#22c55e"
+              strokeWidth="2.5"
+              strokeDasharray="4 4"
+            />
+            <circle cx={livePointMeasure.p1.x} cy={livePointMeasure.p1.y} r="5" fill="#22c55e" stroke="#ffffff" strokeWidth="2" />
+            <circle cx={livePointMeasure.p2.x} cy={livePointMeasure.p2.y} r="5" fill="#22c55e" stroke="#ffffff" strokeWidth="2" />
+          </svg>
+          <div
+            className="absolute pointer-events-none z-20 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-lg border border-surface-200 text-brand-600 font-bold text-sm transition-all duration-75"
+            style={{
+              left: livePointMeasure.mid.x,
+              top: livePointMeasure.mid.y - 24,
+              transform: 'translateX(-50%)',
+            }}
+          >
+            {displayDistance(livePointMeasure.distance)}
+          </div>
+        </>
       )}
 
       {/* Advanced Measure Overlay */}
       {mode === 'measure' && measureType === 'face' && selectedEntities.length > 0 && (
-        <div className="absolute bottom-6 left-4 right-4 md:bottom-auto md:left-auto md:top-6 md:right-6 bg-white/95 backdrop-blur-xl border border-surface-200/60 shadow-2xl rounded-2xl p-4 sm:p-5 md:min-w-[280px] animate-fade-in-up z-20">
-          <div className="flex justify-between items-center mb-4 sm:mb-5">
-            <h3 className="font-bold text-dark-900 text-[13px] uppercase tracking-wider">Measurement details</h3>
-            <button 
-              onClick={() => setSelectedEntities([])} 
-              className="text-[11px] font-semibold text-brand-600 hover:text-white bg-brand-50 hover:bg-brand-500 transition-all px-2.5 py-1.5 rounded-lg"
-            >
-              Reset
-            </button>
-          </div>
-          
-          <div className="space-y-1 text-sm">
-            {selectedEntities.map((ent, i) => (
-              <div key={ent.id} className="flex justify-between items-center py-2 border-b border-surface-100">
-                <span className="text-dark-500 font-medium">Face {i + 1}</span>
-                <span className="font-bold text-dark-900">{displayArea(ent.area)}</span>
+        isDetailsCollapsed ? (
+          <button
+            onClick={() => setIsDetailsCollapsed(false)}
+            className="absolute bottom-6 left-4 z-30 bg-white/95 backdrop-blur-xl border border-surface-200/80 shadow-xl rounded-full px-4 py-2.5 flex items-center gap-2 text-xs font-bold text-brand-600 hover:scale-105 transition-all"
+          >
+            <Ruler className="w-4 h-4 text-brand-500" />
+            <span>Measurement details ({selectedEntities.length} face{selectedEntities.length > 1 ? 's' : ''})</span>
+            <ChevronUp className="w-4 h-4 text-dark-400" />
+          </button>
+        ) : (
+          <div className="absolute bottom-6 left-4 right-4 md:bottom-auto md:left-auto md:top-6 md:right-6 bg-white/95 backdrop-blur-xl border border-surface-200/60 shadow-2xl rounded-2xl p-4 sm:p-5 md:min-w-[280px] animate-fade-in-up z-20">
+            <div className="flex justify-between items-center mb-4 sm:mb-5">
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-dark-900 text-[13px] uppercase tracking-wider">Measurement details</h3>
+                <button
+                  onClick={() => setIsDetailsCollapsed(true)}
+                  className="text-dark-400 hover:text-dark-900 p-1.5 rounded-md hover:bg-surface-100 transition-colors"
+                  title="Minimize"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
               </div>
-            ))}
-
-            {selectedEntities.length === 2 && (
-              <div className="pt-2 space-y-1">
-                {/* Entraxe */}
-                <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
-                  <span className="text-dark-600 font-medium flex items-center gap-2">
-                    <div className="w-3 h-0.5 border-t-2 border-dashed border-green-500"></div> 
-                    Center distance
-                  </span>
-                  <span className="font-bold text-dark-900">{displayDistance(selectedEntities[0].centroid.distanceTo(selectedEntities[1].centroid))}</span>
+              <button 
+                onClick={() => setSelectedEntities([])} 
+                className="text-[11px] font-semibold text-brand-600 hover:text-white bg-brand-50 hover:bg-brand-500 transition-all px-2.5 py-1.5 rounded-lg"
+              >
+                Reset
+              </button>
+            </div>
+            
+            <div className="space-y-1 text-sm">
+              {selectedEntities.map((ent, i) => (
+                <div key={ent.id} className="flex justify-between items-center py-2 border-b border-surface-100">
+                  <span className="text-dark-500 font-medium">Face {i + 1}</span>
+                  <span className="font-bold text-dark-900">{displayArea(ent.area)}</span>
                 </div>
-                
-                {/* Parallélisme check */}
-                {Math.abs(selectedEntities[0].normal.dot(selectedEntities[1].normal)) > 0.99 && (
+              ))}
+
+              {selectedEntities.length === 2 && (
+                <div className="pt-2 space-y-1">
+                  {/* Entraxe */}
                   <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
                     <span className="text-dark-600 font-medium flex items-center gap-2">
-                      <div className="w-3 h-0.5 bg-dark-300"></div> 
-                      Planar distance
+                      <div className="w-3 h-0.5 border-t-2 border-dashed border-green-500"></div> 
+                      Center distance
                     </span>
-                    <span className="font-bold text-dark-900">
-                      {displayDistance(Math.abs(selectedEntities[0].normal.dot(selectedEntities[1].centroid.clone().sub(selectedEntities[0].centroid))))}
-                    </span>
+                    <span className="font-bold text-dark-900">{displayDistance(selectedEntities[0].centroid.distanceTo(selectedEntities[1].centroid))}</span>
                   </div>
-                )}
+                  
+                  {/* Parallélisme check */}
+                  {Math.abs(selectedEntities[0].normal.dot(selectedEntities[1].normal)) > 0.99 && (
+                    <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
+                      <span className="text-dark-600 font-medium flex items-center gap-2">
+                        <div className="w-3 h-0.5 bg-dark-300"></div> 
+                        Planar distance
+                      </span>
+                      <span className="font-bold text-dark-900">
+                        {displayDistance(Math.abs(selectedEntities[0].normal.dot(selectedEntities[1].centroid.clone().sub(selectedEntities[0].centroid))))}
+                      </span>
+                    </div>
+                  )}
 
-                {faceDistances && (
-                  <>
-                    <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
-                      <span className="text-dark-600 font-medium flex items-center gap-2">
-                        <div className="w-3 h-0.5 bg-blue-500 rounded-full"></div> 
-                        Dist. Min
-                      </span>
-                      <span className="font-bold text-dark-900">{displayDistance(faceDistances.min)}</span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
-                      <span className="text-dark-600 font-medium flex items-center gap-2">
-                        <div className="w-3 h-0.5 bg-red-500 rounded-full"></div> 
-                        Dist. Max
-                      </span>
-                      <span className="font-bold text-dark-900">{displayDistance(faceDistances.max)}</span>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+                  {faceDistances && (
+                    <>
+                      <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
+                        <span className="text-dark-600 font-medium flex items-center gap-2">
+                          <div className="w-3 h-0.5 bg-blue-500 rounded-full"></div> 
+                          Dist. Min
+                        </span>
+                        <span className="font-bold text-dark-900">{displayDistance(faceDistances.min)}</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center py-1.5 hover:bg-surface-50 px-2 -mx-2 rounded-lg transition-colors">
+                        <span className="text-dark-600 font-medium flex items-center gap-2">
+                          <div className="w-3 h-0.5 bg-red-500 rounded-full"></div> 
+                          Dist. Max
+                        </span>
+                        <span className="font-bold text-dark-900">{displayDistance(faceDistances.max)}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )
       )}
 
       {/* Mode indicator */}
