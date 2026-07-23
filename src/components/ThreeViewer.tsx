@@ -180,6 +180,23 @@ export default function ThreeViewer({
     controls.maxDistance = 500
     controlsRef.current = controls
 
+    const handleControlsChange = () => {
+      if (measurePointsRef.current.length === 2 && cameraRef.current && canvasRef.current) {
+        const c = canvasRef.current
+        const rect = c.getBoundingClientRect()
+        const pt1 = measurePointsRef.current[0].point.clone().project(cameraRef.current)
+        const pt2 = measurePointsRef.current[1].point.clone().project(cameraRef.current)
+
+        const s1 = { x: ((pt1.x + 1) / 2) * rect.width, y: ((-pt1.y + 1) / 2) * rect.height }
+        const s2 = { x: ((pt2.x + 1) / 2) * rect.width, y: ((-pt2.y + 1) / 2) * rect.height }
+        const mid = { x: (s1.x + s2.x) / 2, y: (s1.y + s2.y) / 2 }
+        const dist = measurePointsRef.current[0].point.distanceTo(measurePointsRef.current[1].point)
+
+        setLivePointMeasure({ p1: s1, p2: s2, mid, distance: dist })
+      }
+    }
+    controls.addEventListener('change', handleControlsChange)
+
     // Lights
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
     scene.add(ambientLight)
@@ -561,7 +578,7 @@ export default function ThreeViewer({
 
     measurePoints.forEach(mp => {
       const sphereGeo = new THREE.SphereGeometry(0.0015, 16, 16)
-      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, depthTest: false })
+      const sphereMat = new THREE.MeshBasicMaterial({ color: 0x22c55e, depthTest: false })
       const sphere = new THREE.Mesh(sphereGeo, sphereMat)
       sphere.renderOrder = 999
       sphere.position.copy(mp.point)
@@ -577,7 +594,7 @@ export default function ThreeViewer({
 
       const geo = new LineGeometry()
       geo.setPositions([p1.x, p1.y, p1.z, p2.x, p2.y, p2.z])
-      const mat = new LineMaterial({ color: 0xf59e0b, linewidth: 3, depthTest: false })
+      const mat = new LineMaterial({ color: 0x22c55e, linewidth: 3, depthTest: false })
       mat.resolution.set(w, h)
       const line = new Line2(geo, mat)
       line.renderOrder = 999

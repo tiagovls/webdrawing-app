@@ -315,9 +315,12 @@ export default function LandingPage() {
                   </Link>
                 )}
               </div>
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs sm:text-sm font-semibold backdrop-blur-md shadow-sm">
-                <Smartphone className="w-4 h-4 text-emerald-400" />
-                <span>100% Mobile & Tablet Compatible (iOS & Android)</span>
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs sm:text-sm font-medium backdrop-blur-md shadow-md transition-all hover:bg-white/15">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="tracking-wide">Fully Compatible with Mobile & Tablet Devices</span>
               </div>
               <p className="text-white/90 text-xs sm:text-sm flex items-center gap-1.5 font-medium">
                 <CheckCircle2 className="w-4 h-4 text-accent-500 shrink-0" />
