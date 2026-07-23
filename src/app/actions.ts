@@ -16,7 +16,7 @@ export async function getUserPlan(clientUserId?: string) {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { stripeCurrentPeriodEnd: true, stripeSubscriptionId: true }
+      select: { stripeCurrentPeriodEnd: true, stripeSubscriptionId: true, stripeCustomerId: true }
     })
 
     if (!user) {
@@ -26,6 +26,7 @@ export async function getUserPlan(clientUserId?: string) {
     // Check for Lifetime Pro or active subscription
     if (
       user.stripeSubscriptionId === "LIFETIME_PRO" ||
+      user.stripeCustomerId === "LIFETIME_PRO" ||
       (user.stripeCurrentPeriodEnd && user.stripeCurrentPeriodEnd.getTime() > Date.now())
     ) {
       return { isPro: true, plan: "Pro" }
