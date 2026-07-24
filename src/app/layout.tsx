@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://webdrawing.fr'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.webdrawing.fr'),
   title: {
     default: 'WebDrawing | Visualiseur 3D CAO & Collaboration de Plans en Ligne',
     template: '%s | WebDrawing',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     'annotations 3D',
     'viewer STEP GLTF'
   ],
-  authors: [{ name: 'WebDrawing', url: 'https://webdrawing.fr' }],
+  authors: [{ name: 'WebDrawing', url: 'https://www.webdrawing.fr' }],
   creator: 'WebDrawing',
   publisher: 'WebDrawing',
   formatDetection: {
@@ -48,12 +48,12 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: 'https://webdrawing.fr',
+    canonical: 'https://www.webdrawing.fr',
   },
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: 'https://webdrawing.fr',
+    url: 'https://www.webdrawing.fr',
     siteName: 'WebDrawing',
     title: 'WebDrawing | Visualiseur 3D CAO & Collaboration de Plans en Ligne',
     description: "Partagez, mesurez et annotez vos modèles 3D CAO (SolidWorks, STEP) directement dans le navigateur. Sans installation.",
