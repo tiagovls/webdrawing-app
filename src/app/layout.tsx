@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 
 const inter = Inter({
@@ -117,6 +118,7 @@ export default function RootLayout({
         </head>
         <body className="antialiased bg-surface-50 text-dark-900 font-sans">
           {children}
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
