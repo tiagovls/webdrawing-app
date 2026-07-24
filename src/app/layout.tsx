@@ -18,14 +18,17 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://webdrawing.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://webdrawing.fr'),
   title: {
-    default: 'WebDrawing | Partage de modèles 3D CAO sans friction',
+    default: 'WebDrawing | Visualiseur 3D CAO & Collaboration de Plans en Ligne',
     template: '%s | WebDrawing',
   },
   description:
-    "L'alternative moderne à eDrawings. Partagez, mesurez et annotez vos modèles 3D (SolidWorks, Fusion360, FreeCAD) directement dans le navigateur. Sans installation, sans compte.",
+    "WebDrawing est la plateforme moderne pour partager, mesurer et annoter vos modèles 3D CAO (SolidWorks, STEP, IGES, STL) directement dans votre navigateur, sans aucun plugin.",
   keywords: [
+    'WebDrawing',
+    'webdrawing',
+    'webdrawing.fr',
     'Visionneuse 3D web', 
     'Collaboration CAO', 
     'Partage modèle 3D', 
@@ -34,9 +37,9 @@ export const metadata: Metadata = {
     'bureau d\'études',
     'freelance mécanique',
     'annotations 3D',
-    'viewer GLTF'
+    'viewer STEP GLTF'
   ],
-  authors: [{ name: 'WebDrawing' }],
+  authors: [{ name: 'WebDrawing', url: 'https://webdrawing.fr' }],
   creator: 'WebDrawing',
   publisher: 'WebDrawing',
   formatDetection: {
@@ -45,27 +48,27 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://webdrawing.fr',
   },
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
-    url: '/',
+    url: 'https://webdrawing.fr',
     siteName: 'WebDrawing',
-    title: 'WebDrawing | Partage de modèles 3D CAO sans friction',
-    description: "Partagez, mesurez et annotez vos modèles 3D (SolidWorks, Fusion360) directement dans le navigateur. L'alternative à eDrawings.",
+    title: 'WebDrawing | Visualiseur 3D CAO & Collaboration de Plans en Ligne',
+    description: "Partagez, mesurez et annotez vos modèles 3D CAO (SolidWorks, STEP) directement dans le navigateur. Sans installation.",
     images: [
       {
-        url: '/og-image.jpg', // Vous pourrez ajouter une image og-image.jpg dans le dossier public
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'WebDrawing - Partage CAO 3D',
+        alt: 'WebDrawing - Visualiseur CAO 3D en Ligne',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'WebDrawing | Partage de modèles 3D CAO sans friction',
+    title: 'WebDrawing | Visualiseur 3D CAO en Ligne',
     description: "Partagez, mesurez et annotez vos modèles 3D directement dans le navigateur. Sans installation.",
     creator: '@webdrawing',
     images: ['/og-image.jpg'],
@@ -88,9 +91,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'WebDrawing',
+    operatingSystem: 'All',
+    applicationCategory: 'DesignApplication',
+    url: 'https://webdrawing.fr',
+    description: 'Visualiseur 3D CAO et outil de collaboration en ligne pour fichiers SolidWorks, STEP, IGES, STL.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'EUR',
+    },
+  }
+
   return (
     <ClerkProvider>
       <html lang="fr" className={inter.variable}>
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        </head>
         <body className="antialiased bg-surface-50 text-dark-900 font-sans">
           {children}
         </body>

@@ -1,15 +1,26 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://webdrawing.com'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://webdrawing.fr'
 
   return [
     {
       url: `${baseUrl}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'daily',
       priority: 1,
     },
-    // Vous pourrez rajouter les urls pour vos autres pages ici (ex: /pricing, /contact)
+    {
+      url: `${baseUrl}/sign-in`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/sign-up`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
   ]
 }
