@@ -33,7 +33,16 @@ export async function POST(req: Request) {
     }
 
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-    const periodEnd = subscription.current_period_end || subscription.trial_end;
+    const subAny = subscription as unknown as Record<string, unknown>;
+    const rawPeriodEnd =
+      (subAny.current_period_end as number | undefined) ||
+      (subAny.trial_end as number | undefined) ||
+      ((subAny.items as { data?: Array<{ current_period_end?: number; trial_end?: number }> })?.data?.[0]?.current_period_end) ||
+      ((subAny.items as { data?: Array<{ current_period_end?: number; trial_end?: number }> })?.data?.[0]?.trial_end);
+
+    const periodEndDate = rawPeriodEnd
+      ? new Date(rawPeriodEnd * 1000)
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     await prisma.user.update({
       where: { id: session.metadata.userId },
@@ -41,20 +50,30 @@ export async function POST(req: Request) {
         stripeSubscriptionId: subscription.id,
         stripeCustomerId: subscription.customer as string,
         stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: periodEnd ? new Date(periodEnd * 1000) : null,
+        stripeCurrentPeriodEnd: periodEndDate,
+        hasUsedTrial: true,
       },
     });
   }
 
   if (event.type === "customer.subscription.updated") {
     const subscription = event.data.object as Stripe.Subscription;
-    const periodEnd = subscription.current_period_end || subscription.trial_end;
+    const subAny = subscription as unknown as Record<string, unknown>;
+    const rawPeriodEnd =
+      (subAny.current_period_end as number | undefined) ||
+      (subAny.trial_end as number | undefined) ||
+      ((subAny.items as { data?: Array<{ current_period_end?: number; trial_end?: number }> })?.data?.[0]?.current_period_end) ||
+      ((subAny.items as { data?: Array<{ current_period_end?: number; trial_end?: number }> })?.data?.[0]?.trial_end);
+
+    const periodEndDate = rawPeriodEnd
+      ? new Date(rawPeriodEnd * 1000)
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
     await prisma.user.updateMany({
       where: { stripeSubscriptionId: subscription.id },
       data: {
         stripePriceId: subscription.items?.data?.[0]?.price?.id ?? null,
-        stripeCurrentPeriodEnd: periodEnd ? new Date(periodEnd * 1000) : null,
+        stripeCurrentPeriodEnd: periodEndDate,
       },
     });
   }
