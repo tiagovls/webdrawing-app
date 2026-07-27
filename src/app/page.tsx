@@ -337,15 +337,18 @@ export default function LandingPage() {
         {/* ── Problem & Comparison (Unified Section, English) ─────────── */}
         <section className="py-24 px-6 max-w-5xl mx-auto">
           <FadeUp className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
               The Modern Alternative to eDrawings
             </span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl text-dark-800 leading-tight max-w-4xl mx-auto font-normal">
-              <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3.5 py-1 rounded-xl text-dark-950 inline-block -rotate-1 shadow-sm ring-2 ring-[#bbf7d0]/50 font-black">
+            <h2 className="text-3xl sm:text-4xl font-bold text-dark-900 mb-3">
+              <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-lg text-dark-900 inline-block -rotate-2 shadow-sm ring-2 ring-[#bbf7d0]/50">
                 85% of clients
               </span>{" "}
-              don't have CAD software or the <span className="font-bold text-dark-950">IT admin rights</span> required to install heavy viewers (eDrawings) on their work computer.
+              can't open eDrawings
             </h2>
+            <p className="text-base sm:text-lg text-dark-600 max-w-3xl mx-auto">
+              They don't have CAD software or the IT admin rights required to install heavy viewers on their work computer.
+            </p>
           </FadeUp>
 
           {/* Unified Comparison Container Card */}
