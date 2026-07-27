@@ -356,11 +356,11 @@ export default function LandingPage() {
               
               <div>
                 <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-6xl sm:text-7xl font-black tracking-tight text-brand-400">90%</span>
-                  <span className="text-xl sm:text-2xl font-bold text-dark-200">de gain de temps</span>
+                  <span className="text-6xl sm:text-7xl font-black tracking-tight text-brand-400">85%</span>
+                  <span className="text-xl sm:text-2xl font-bold text-dark-200">des clients</span>
                 </div>
                 <p className="text-dark-300 text-sm sm:text-base leading-relaxed mb-8">
-                  Des clients ou sous-traitants abandonnent ou rencontrent une erreur en installant des logiciels CAO lourds.
+                  n'ont pas de logiciel CAO ou les droits administrateur requis pour installer un viewer lourd (eDrawings) sur leur poste professionnel.
                 </p>
 
                 <div className="space-y-4 border-t border-dark-700/80 pt-6">
