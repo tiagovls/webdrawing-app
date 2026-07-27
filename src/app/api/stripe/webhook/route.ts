@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     }
 
     const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-    const periodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
+    const periodEnd = subscription.current_period_end || subscription.trial_end;
 
     await prisma.user.update({
       where: { id: session.metadata.userId },
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
   if (event.type === "customer.subscription.updated") {
     const subscription = event.data.object as Stripe.Subscription;
-    const periodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
+    const periodEnd = subscription.current_period_end || subscription.trial_end;
 
     await prisma.user.updateMany({
       where: { stripeSubscriptionId: subscription.id },

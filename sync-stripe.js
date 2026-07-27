@@ -20,13 +20,16 @@ async function run() {
       console.log(`Checking subscriptions for customer ${user.stripeCustomerId}...`);
       const subscriptions = await stripe.subscriptions.list({
         customer: user.stripeCustomerId,
-        status: "active",
-        limit: 1,
+        limit: 10,
       });
 
-      if (subscriptions.data.length > 0) {
-        const sub = subscriptions.data[0];
-        console.log(`Found active subscription ${sub.id} for user ${user.email}`);
+      const activeOrTrialingSub = subscriptions.data.find(
+        (s) => s.status === "active" || s.status === "trialing"
+      );
+
+      if (activeOrTrialingSub) {
+        const sub = activeOrTrialingSub;
+        console.log(`Found sub (${sub.status}) ${sub.id} for user ${user.email}`);
         
         await prisma.user.update({
           where: { id: user.id },
@@ -38,7 +41,7 @@ async function run() {
         });
         console.log(`✅ User ${user.email} upgraded to PRO in DB!`);
       } else {
-        console.log(`No active subscriptions for ${user.email}`);
+        console.log(`No active/trialing subscriptions for ${user.email}`);
       }
     } catch (err) {
       console.error(`Error processing user ${user.email}:`, err.message);

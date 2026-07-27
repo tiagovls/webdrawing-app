@@ -27,7 +27,7 @@ export async function getUserPlan(clientUserId?: string) {
     if (
       user.stripeSubscriptionId === "LIFETIME_PRO" ||
       user.stripeCustomerId === "LIFETIME_PRO" ||
-      (user.stripeCurrentPeriodEnd && user.stripeCurrentPeriodEnd.getTime() > Date.now())
+      (user.stripeSubscriptionId && (!user.stripeCurrentPeriodEnd || user.stripeCurrentPeriodEnd.getTime() > Date.now()))
     ) {
       return { isPro: true, plan: "Pro" }
     }
