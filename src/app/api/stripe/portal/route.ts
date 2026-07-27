@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const dbUser = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!dbUser || !dbUser.stripeCustomerId) {
-      return new NextResponse("No active subscription found", { status: 400 });
+      return NextResponse.json({ error: "Aucun identifiant client Stripe trouvé pour cet utilisateur." }, { status: 400 });
     }
 
     const host = req.headers.get("host") || "localhost:3000";
@@ -27,8 +27,9 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ url: portalSession.url });
-  } catch (error) {
-    console.error("STRIPE_PORTAL_ERROR", error);
-    return new NextResponse("Internal Error", { status: 500 });
+  } catch (error: unknown) {
+    const errorMsg = error instanceof Error ? error.message : "Erreur interne Stripe Portal";
+    console.error("STRIPE_PORTAL_ERROR:", errorMsg);
+    return NextResponse.json({ error: errorMsg }, { status: 500 });
   }
 }

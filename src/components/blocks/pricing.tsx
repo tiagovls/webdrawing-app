@@ -81,12 +81,16 @@ export function Pricing() {
         }
       });
       const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Impossible de se connecter au portail Stripe.");
+        return;
+      }
       if (data.url) {
         window.location.href = data.url;
       }
     } catch (error) {
       console.error("Portal error:", error);
-      alert("Failed to connect to Stripe portal.");
+      alert("Erreur lors de la connexion au portail Stripe.");
     } finally {
       setIsLoading(false);
     }
