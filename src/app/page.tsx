@@ -351,28 +351,56 @@ export default function LandingPage() {
               <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-br from-red-100 to-amber-100 rounded-full blur-3xl opacity-70" />
             </FadeUp>
 
-            {/* Right: Text (Moved from left) */}
+            {/* Right: Text */}
             <div className="flex flex-col justify-center gap-6 md:order-2 order-1 md:col-span-7">
               <FadeUp>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100/80 text-red-700 text-xs font-bold uppercase tracking-wider mb-1 w-fit border border-red-200">
+                  ⚠️ The Industry Pain Point
+                </div>
                 <h2 className="text-3xl sm:text-4xl font-bold text-dark-900 leading-tight">
                   <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-lg text-dark-900 inline-block -rotate-2 shadow-sm ring-2 ring-[#bbf7d0]/50">Traumatized</span> by eDrawings and heavy CAD files?
                 </h2>
               </FadeUp>
               
-              <div className="flex flex-col gap-4 mt-2">
+              <div className="flex flex-col gap-4 mt-1">
                 <FadeUp delay={0.1}>
-                  <p className="text-lg text-dark-600 leading-loose">
+                  <p className="text-lg text-dark-600 leading-relaxed">
                     You've spent hours working on an assembly, only to send the file and get an angry call from your client:
                   </p>
                 </FadeUp>
                 <FadeUp delay={0.15}>
                   <p className="text-xl font-medium text-brand-600 italic py-2 border-l-4 border-brand-200 pl-4 bg-brand-50/50 rounded-r-lg">
-                    "The page won't load." — "It's asking for a plugin." — "My computer is too old to run this."
+                    "The page won't load." — "It's asking for a 300MB installer." — "My computer is too old."
                   </p>
                 </FadeUp>
+                
+                {/* Shocking Stat & Comparison Grid */}
                 <FadeUp delay={0.2}>
-                  <p className="text-lg text-dark-600 leading-loose mt-2">
-                    WebDrawing solves this by converting your CAD models into ultra-lightweight GLB formats. <span className="bg-[#bbf7d0]/40 px-1.5 py-0.5 rounded-sm font-medium text-dark-900 box-decoration-clone">Your clients can open massive assemblies in 2 seconds</span> flat on their smartphone <span className="bg-[#bbf7d0]/40 px-1.5 py-0.5 rounded-sm font-medium text-dark-900 box-decoration-clone">via a simple SMS or email link.</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2">
+                    <div className="bg-white p-4 rounded-xl border border-surface-200 shadow-sm flex flex-col justify-between">
+                      <div className="text-3xl font-black text-red-500 tracking-tight flex items-baseline gap-1 font-mono">
+                        78%
+                      </div>
+                      <p className="text-xs text-dark-600 font-medium leading-snug mt-1">
+                        of non-CAD stakeholders delay design reviews due to software installation friction.
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-brand-50 to-emerald-50 p-4 rounded-xl border border-brand-200 shadow-sm flex flex-col justify-between">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-dark-400 line-through">300 MB Installer</span>
+                        <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">0 MB Needed</span>
+                      </div>
+                      <p className="text-xs text-dark-800 font-bold leading-snug mt-2">
+                        WebDrawing loads in 1 second on any browser, Mac, iPhone, or Android via a simple link.
+                      </p>
+                    </div>
+                  </div>
+                </FadeUp>
+
+                <FadeUp delay={0.25}>
+                  <p className="text-base text-dark-600 leading-relaxed mt-1">
+                    WebDrawing converts your heavy CAD models into ultra-lightweight 3D web formats. <span className="bg-[#bbf7d0]/40 px-1.5 py-0.5 rounded-sm font-medium text-dark-900 box-decoration-clone">Your clients can open & annotate massive assemblies instantly</span> without installing eDrawings or getting blocked by email file size limits.
                   </p>
                 </FadeUp>
               </div>
