@@ -334,17 +334,17 @@ export default function LandingPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 w-full bg-surface-50">
-        {/* ── Problem & Comparison (Unified Section, No Emojis) ─────────── */}
+        {/* ── Problem & Comparison (Unified Section, English) ─────────── */}
         <section className="py-24 px-6 max-w-5xl mx-auto">
           <FadeUp className="text-center mb-12">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
-              L'Alternative Moderne à eDrawings
+              The Modern Alternative to eDrawings
             </span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-dark-900 leading-tight max-w-4xl mx-auto">
-              <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-xl text-dark-900 inline-block -rotate-1 shadow-sm ring-2 ring-[#bbf7d0]/50 font-black">
-                85% des clients
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl text-dark-800 leading-tight max-w-4xl mx-auto font-normal">
+              <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3.5 py-1 rounded-xl text-dark-950 inline-block -rotate-1 shadow-sm ring-2 ring-[#bbf7d0]/50 font-black">
+                85% of clients
               </span>{" "}
-              n'ont pas de logiciel CAO ou les droits administrateur requis pour installer un viewer lourd (eDrawings) sur leur poste professionnel.
+              don't have CAD software or the <span className="font-bold text-dark-950">IT admin rights</span> required to install heavy viewers (eDrawings) on their work computer.
             </h2>
           </FadeUp>
 
@@ -353,10 +353,10 @@ export default function LandingPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-surface-200">
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold text-dark-900">
-                  Pourquoi choisir WebDrawing ?
+                  Why choose WebDrawing?
                 </h3>
                 <p className="text-xs sm:text-sm text-dark-500 mt-1">
-                  Une comparaison directe avec les logiciels et visualiseurs de bureau traditionnels.
+                  A direct comparison with traditional desktop software and CAD viewers.
                 </p>
               </div>
               <span className="self-start md:self-auto text-xs font-semibold px-3 py-1.5 rounded-full bg-surface-100 text-dark-600 border border-surface-200">
@@ -368,7 +368,7 @@ export default function LandingPage() {
               <table className="w-full text-left text-xs sm:text-sm border-collapse">
                 <thead>
                   <tr className="border-b border-surface-200">
-                    <th className="py-3.5 px-4 font-bold text-dark-700 w-2/5">Fonctionnalité</th>
+                    <th className="py-3.5 px-4 font-bold text-dark-700 w-2/5">Feature</th>
                     <th className="py-3.5 px-4 font-bold text-rose-700 bg-rose-50/50 rounded-t-xl w-3/10 text-center">
                       eDrawings / Desktop
                     </th>
@@ -379,97 +379,97 @@ export default function LandingPage() {
                 </thead>
                 <tbody className="divide-y divide-surface-100">
                   <tr>
-                    <td className="py-4 px-4 font-medium text-dark-900">Installation requise</td>
+                    <td className="py-4 px-4 font-medium text-dark-900">Installation required</td>
                     <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <X className="w-4 h-4 text-rose-500 shrink-0" />
-                        <span>300 Mo à 1 Go</span>
+                        <span>300 MB to 1 GB</span>
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
-                        <span>0 Mo (Lien Web 1s)</span>
+                        <span>0 MB (1s Web Link)</span>
                       </span>
                     </td>
                   </tr>
 
                   <tr>
-                    <td className="py-4 px-4 font-medium text-dark-900">Compatibilité Mobile & Mac</td>
+                    <td className="py-4 px-4 font-medium text-dark-900">Mobile & Mac Compatibility</td>
                     <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <X className="w-4 h-4 text-rose-500 shrink-0" />
-                        <span>Limitée / Payante</span>
+                        <span>Limited / Paid</span>
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
-                        <span>100% Universel</span>
+                        <span>100% Universal</span>
                       </span>
                     </td>
                   </tr>
 
                   <tr>
-                    <td className="py-4 px-4 font-medium text-dark-900">Envoi par e-mail</td>
+                    <td className="py-4 px-4 font-medium text-dark-900">Send via email</td>
                     <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <X className="w-4 h-4 text-rose-500 shrink-0" />
-                        <span>Bloqué si &gt; 25 Mo</span>
+                        <span>Blocked if &gt; 25 MB</span>
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
-                        <span>Lien URL instantané</span>
+                        <span>Instant URL link</span>
                       </span>
                     </td>
                   </tr>
 
                   <tr>
-                    <td className="py-4 px-4 font-medium text-dark-900">Droits Administrateur (IT)</td>
+                    <td className="py-4 px-4 font-medium text-dark-900">Administrator Rights (IT)</td>
                     <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <X className="w-4 h-4 text-rose-500 shrink-0" />
-                        <span>Indispensables</span>
+                        <span>Mandatory</span>
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
-                        <span>Aucun requis</span>
+                        <span>None required</span>
                       </span>
                     </td>
                   </tr>
 
                   <tr>
-                    <td className="py-4 px-4 font-medium text-dark-900">Annotations & Mesures 3D</td>
+                    <td className="py-4 px-4 font-medium text-dark-900">3D Annotations & Measurements</td>
                     <td className="py-4 px-4 text-center bg-rose-50/20 text-amber-700 font-medium">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                        <span>Version Pro requise</span>
+                        <span>Pro version required</span>
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
-                        <span>Inclus & En direct</span>
+                        <span>Included & Live</span>
                       </span>
                     </td>
                   </tr>
 
                   <tr>
-                    <td className="py-4 px-4 font-medium text-dark-900">Contrôle de la sécurité IP</td>
+                    <td className="py-4 px-4 font-medium text-dark-900">IP Security Control</td>
                     <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <X className="w-4 h-4 text-rose-500 shrink-0" />
-                        <span>Stocké chez le client</span>
+                        <span>Stored on client PC</span>
                       </span>
                     </td>
                     <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
                       <span className="inline-flex items-center justify-center gap-1.5">
                         <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
-                        <span>Lien révocable 1-clic</span>
+                        <span>1-click Revocable link</span>
                       </span>
                     </td>
                   </tr>
@@ -481,10 +481,10 @@ export default function LandingPage() {
             <div className="mt-8 pt-6 border-t border-surface-200 bg-gradient-to-r from-dark-900 via-dark-900 to-dark-800 text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg border border-dark-700">
               <div className="space-y-1 text-center sm:text-left">
                 <h4 className="text-base sm:text-lg font-bold text-white">
-                  Prêt à supprimer les blocages de vos clients ?
+                  Ready to remove friction for your clients?
                 </h4>
                 <p className="text-xs sm:text-sm text-dark-300">
-                  Partagez vos pièces et assemblages CAO en 1 clic sans aucune installation.
+                  Share your CAD parts and assemblies in 1 click without any installation.
                 </p>
               </div>
 
@@ -492,7 +492,7 @@ export default function LandingPage() {
                 href="/#pricing"
                 className="w-full sm:w-auto px-6 py-3 bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md hover:shadow-brand-500/20 text-center shrink-0 inline-flex items-center justify-center gap-2"
               >
-                <span>Commencer l'essai gratuit</span>
+                <span>Start free trial</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
