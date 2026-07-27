@@ -20,6 +20,7 @@ import {
   Quote,
   Lock,
   Smartphone,
+  Zap,
 } from 'lucide-react'
 import { Pricing } from '@/components/blocks/pricing'
 import { PlanBadge } from '@/components/blocks/plan-badge'
@@ -332,79 +333,146 @@ export default function LandingPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 w-full bg-surface-50">
-        {/* ── Problem Agitation ─────────────────────────────────────────── */}
+        {/* ── Problem & Comparison (eDrawings vs WebDrawing) ─────────── */}
         <section className="py-24 px-6 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <FadeUp className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+              L'Alternative Moderne à eDrawings
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-dark-900 leading-tight max-w-4xl mx-auto">
+              Supprimez <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-lg text-dark-900 inline-block -rotate-1 shadow-sm ring-2 ring-[#bbf7d0]/50">90% des frictions</span> d'ouverture de vos fichiers CAO
+            </h2>
+            <p className="text-base sm:text-lg text-dark-500 max-w-2xl mx-auto mt-4">
+              Ne perdez plus vos clients avec des logiciels de 500 Mo, des pièces jointes d'e-mails bloquées et des plugins obsolètes.
+            </p>
+          </FadeUp>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             
-            {/* Left: Image (Moved from right) */}
-            <FadeUp delay={0.3} className="relative mt-8 md:mt-0 md:order-1 order-2 hidden md:block md:col-span-5">
-              <div className="relative rounded-2xl overflow-hidden z-10 aspect-[4/5] bg-surface-100 w-full max-w-[380px] mx-auto lg:ml-auto">
-                <img 
-                  src="/traumatized.jpg" 
-                  alt="Frustrated engineer" 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-tr from-dark-900/10 to-transparent mix-blend-overlay pointer-events-none" />
-              </div>
+            {/* Left: Big Shocking Stat & Value Cards */}
+            <FadeUp delay={0.1} className="lg:col-span-5 flex flex-col justify-between bg-gradient-to-br from-dark-900 via-dark-900 to-dark-800 text-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-dark-700 relative overflow-hidden">
+              {/* Background Glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
               
-              {/* Decorative background blob */}
-              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-br from-red-100 to-amber-100 rounded-full blur-3xl opacity-70" />
-            </FadeUp>
-
-            {/* Right: Text */}
-            <div className="flex flex-col justify-center gap-6 md:order-2 order-1 md:col-span-7">
-              <FadeUp>
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100/80 text-red-700 text-xs font-bold uppercase tracking-wider mb-1 w-fit border border-red-200">
-                  ⚠️ The Industry Pain Point
+              <div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-6xl sm:text-7xl font-black tracking-tight text-brand-400">90%</span>
+                  <span className="text-xl sm:text-2xl font-bold text-dark-200">de gain de temps</span>
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-bold text-dark-900 leading-tight">
-                  <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-lg text-dark-900 inline-block -rotate-2 shadow-sm ring-2 ring-[#bbf7d0]/50">Traumatized</span> by eDrawings and heavy CAD files?
-                </h2>
-              </FadeUp>
-              
-              <div className="flex flex-col gap-4 mt-1">
-                <FadeUp delay={0.1}>
-                  <p className="text-lg text-dark-600 leading-relaxed">
-                    You've spent hours working on an assembly, only to send the file and get an angry call from your client:
-                  </p>
-                </FadeUp>
-                <FadeUp delay={0.15}>
-                  <p className="text-xl font-medium text-brand-600 italic py-2 border-l-4 border-brand-200 pl-4 bg-brand-50/50 rounded-r-lg">
-                    "The page won't load." — "It's asking for a 300MB installer." — "My computer is too old."
-                  </p>
-                </FadeUp>
-                
-                {/* Shocking Stat & Comparison Grid */}
-                <FadeUp delay={0.2}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2">
-                    <div className="bg-white p-4 rounded-xl border border-surface-200 shadow-sm flex flex-col justify-between">
-                      <div className="text-3xl font-black text-red-500 tracking-tight flex items-baseline gap-1 font-mono">
-                        78%
-                      </div>
-                      <p className="text-xs text-dark-600 font-medium leading-snug mt-1">
-                        of non-CAD stakeholders delay design reviews due to software installation friction.
-                      </p>
-                    </div>
+                <p className="text-dark-300 text-sm sm:text-base leading-relaxed mb-8">
+                  Des clients ou sous-traitants abandonnent ou rencontrent une erreur en installant des logiciels CAO lourds.
+                </p>
 
-                    <div className="bg-gradient-to-br from-brand-50 to-emerald-50 p-4 rounded-xl border border-brand-200 shadow-sm flex flex-col justify-between">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-dark-400 line-through">300 MB Installer</span>
-                        <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">0 MB Needed</span>
-                      </div>
-                      <p className="text-xs text-dark-800 font-bold leading-snug mt-2">
-                        WebDrawing loads in 1 second on any browser, Mac, iPhone, or Android via a simple link.
-                      </p>
+                <div className="space-y-4 border-t border-dark-700/80 pt-6">
+                  <div className="flex items-start gap-3.5">
+                    <div className="p-2.5 rounded-xl bg-brand-500/20 text-brand-400 shrink-0 mt-0.5 border border-brand-500/30">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm sm:text-base">0 sec d'installation</h4>
+                      <p className="text-dark-400 text-xs sm:text-sm">Vos clients ouvrent le modèle 3D instantanément sur n'importe quel écran.</p>
                     </div>
                   </div>
-                </FadeUp>
 
-                <FadeUp delay={0.25}>
-                  <p className="text-base text-dark-600 leading-relaxed mt-1">
-                    WebDrawing converts your heavy CAD models into ultra-lightweight 3D web formats. <span className="bg-[#bbf7d0]/40 px-1.5 py-0.5 rounded-sm font-medium text-dark-900 box-decoration-clone">Your clients can open & annotate massive assemblies instantly</span> without installing eDrawings or getting blocked by email file size limits.
-                  </p>
-                </FadeUp>
+                  <div className="flex items-start gap-3.5">
+                    <div className="p-2.5 rounded-xl bg-brand-500/20 text-brand-400 shrink-0 mt-0.5 border border-brand-500/30">
+                      <Smartphone className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm sm:text-base">100% compatible Web & Mobile</h4>
+                      <p className="text-dark-400 text-xs sm:text-sm">Fonctionne sur iPhone, Android, Mac, PC et tablettes sans aucune application.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5">
+                    <div className="p-2.5 rounded-xl bg-brand-500/20 text-brand-400 shrink-0 mt-0.5 border border-brand-500/30">
+                      <Shield className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-sm sm:text-base">Partage ultra-sécurisé</h4>
+                      <p className="text-dark-400 text-xs sm:text-sm">Contrôlez les accès avec mot de passe et révoquez le lien à tout moment.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
+
+              <div className="mt-8 pt-6 border-t border-dark-700/80 flex items-center justify-between">
+                <span className="text-xs text-dark-400 font-medium">Prêt en moins de 1 minute</span>
+                <Link
+                  href="/#pricing"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-400 hover:text-brand-300 transition-colors"
+                >
+                  <span>Essayer WebDrawing</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </FadeUp>
+
+            {/* Right: Comparison Table Card */}
+            <FadeUp delay={0.2} className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-surface-200 shadow-xl flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-dark-900 mb-6 flex items-center justify-between">
+                  <span>Comparatif direct</span>
+                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-surface-100 text-dark-600 border border-surface-200">eDrawings vs WebDrawing</span>
+                </h3>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                    <thead>
+                      <tr className="border-b border-surface-200">
+                        <th className="py-3 px-3 font-semibold text-dark-500 w-2/5">Fonctionnalité</th>
+                        <th className="py-3 px-3 font-semibold text-red-600 bg-red-50/60 rounded-t-xl w-3/10 text-center">eDrawings / Desktop</th>
+                        <th className="py-3 px-3 font-bold text-brand-700 bg-brand-50/70 rounded-t-xl w-3/10 text-center">WebDrawing</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-surface-100">
+                      <tr>
+                        <td className="py-3.5 px-3 font-medium text-dark-900">Installation requise</td>
+                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ 300 Mo à 1 Go</td>
+                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ 0 Mo (Lien Web 1s)</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3.5 px-3 font-medium text-dark-900">Compatibilité Mobile & Mac</td>
+                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Limitée / Payante</td>
+                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ 100% Universel</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3.5 px-3 font-medium text-dark-900">Envoi par e-mail</td>
+                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Bloqué si &gt; 25 Mo</td>
+                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Lien URL instantané</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3.5 px-3 font-medium text-dark-900">Droits Administrateur (IT)</td>
+                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Indispensables</td>
+                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Aucun requis</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3.5 px-3 font-medium text-dark-900">Annotations & Mesures 3D</td>
+                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">⚠️ Version Pro requise</td>
+                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Inclus & En direct</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3.5 px-3 font-medium text-dark-900">Contrôle de la sécurité IP</td>
+                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Conservé chez le client</td>
+                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Lien révocable 1-clic</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-surface-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-50 p-4 rounded-2xl">
+                <p className="text-xs text-dark-600 font-medium text-center sm:text-left">
+                  Offrez une expérience moderne et fluide à vos clients et partenaires.
+                </p>
+                <Link
+                  href="/#pricing"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-dark-900 hover:bg-dark-800 text-white font-semibold text-xs rounded-xl transition-all shadow-md text-center shrink-0"
+                >
+                  Commencer l'essai gratuit
+                </Link>
+              </div>
+            </FadeUp>
 
           </div>
         </section>
