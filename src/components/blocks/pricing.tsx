@@ -288,15 +288,13 @@ export function Pricing() {
 
               <div className="mt-6 space-y-2">
                 <button
-                  onClick={plan === "Pro" ? () => router.push("/dashboard") : handleCheckout}
+                  onClick={handleCheckout}
                   disabled={isLoading}
                   className="w-full bg-dark-900 hover:bg-dark-800 disabled:opacity-50 text-white font-semibold py-3 px-5 rounded-lg transition-all shadow flex items-center justify-between group text-sm"
                 >
                   <span>
                     {isLoading
                       ? "Loading..."
-                      : plan === "Pro"
-                      ? "Go to dashboard"
                       : hasUsedTrial
                       ? "Start now"
                       : "Start free trial"}
