@@ -59,12 +59,14 @@ export function Pricing() {
   const router = useRouter();
   const { isSignedIn, getToken, isLoaded, userId } = useAuth();
   const [plan, setPlan] = useState<"Free" | "Pro" | null>(null);
+  const [hasUsedTrial, setHasUsedTrial] = useState(false);
 
   useEffect(() => {
     async function fetchPlan() {
       if (isLoaded && userId) {
         const data = await getUserPlan(userId);
         setPlan(data.plan as "Free" | "Pro");
+        setHasUsedTrial(data.hasUsedTrial ?? false);
       }
     }
     fetchPlan();
@@ -286,11 +288,19 @@ export function Pricing() {
 
               <div className="mt-6 space-y-2">
                 <button
-                  onClick={handleCheckout}
+                  onClick={plan === "Pro" ? () => router.push("/dashboard") : handleCheckout}
                   disabled={isLoading}
                   className="w-full bg-dark-900 hover:bg-dark-800 disabled:opacity-50 text-white font-semibold py-3 px-5 rounded-lg transition-all shadow flex items-center justify-between group text-sm"
                 >
-                  <span>{isLoading ? "Loading..." : "Start free trial"}</span>
+                  <span>
+                    {isLoading
+                      ? "Loading..."
+                      : plan === "Pro"
+                      ? "Go to dashboard"
+                      : hasUsedTrial
+                      ? "Start now"
+                      : "Start free trial"}
+                  </span>
                   {!isLoading && <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
                 </button>
                 <Link

@@ -11,17 +11,19 @@ export async function getUserPlan(clientUserId?: string) {
     const userId = serverUserId || clientUserId;
     
     if (!userId) {
-      return { isPro: false, plan: "Free" }
+      return { isPro: false, plan: "Free", hasUsedTrial: false }
     }
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { stripeCurrentPeriodEnd: true, stripeSubscriptionId: true, stripeCustomerId: true }
+      select: { stripeCurrentPeriodEnd: true, stripeSubscriptionId: true, stripeCustomerId: true, hasUsedTrial: true }
     })
 
     if (!user) {
-      return { isPro: false, plan: "Free" }
+      return { isPro: false, plan: "Free", hasUsedTrial: false }
     }
+
+    const hasUsedTrial = user.hasUsedTrial ?? false;
 
     // Check for Lifetime Pro or active subscription
     if (
@@ -29,13 +31,13 @@ export async function getUserPlan(clientUserId?: string) {
       user.stripeCustomerId === "LIFETIME_PRO" ||
       (user.stripeSubscriptionId && (!user.stripeCurrentPeriodEnd || user.stripeCurrentPeriodEnd.getTime() > Date.now()))
     ) {
-      return { isPro: true, plan: "Pro" }
+      return { isPro: true, plan: "Pro", hasUsedTrial }
     }
 
-    return { isPro: false, plan: "Free" }
+    return { isPro: false, plan: "Free", hasUsedTrial }
   } catch (error) {
     console.error("getUserPlan error:", error);
-    return { isPro: false, plan: "Free" }
+    return { isPro: false, plan: "Free", hasUsedTrial: false }
   }
 }
 

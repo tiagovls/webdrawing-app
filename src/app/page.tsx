@@ -87,6 +87,7 @@ export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [plan, setPlan] = useState<'Free' | 'Pro' | null>(null)
+  const [hasUsedTrial, setHasUsedTrial] = useState(false)
   const heroVideoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
@@ -94,6 +95,7 @@ export default function LandingPage() {
       if (isLoaded && userId) {
         const data = await getUserPlan(userId)
         setPlan(data.plan as 'Free' | 'Pro')
+        setHasUsedTrial(data.hasUsedTrial ?? false)
       }
     }
     fetchPlan()
@@ -492,10 +494,16 @@ export default function LandingPage() {
               </div>
 
               <Link
-                href="/#pricing"
+                href={plan === "Pro" ? "/dashboard" : "/#pricing"}
                 className="w-full sm:w-auto px-6 py-3 bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md hover:shadow-brand-500/20 text-center shrink-0 inline-flex items-center justify-center gap-2"
               >
-                <span>Start free trial</span>
+                <span>
+                  {plan === "Pro"
+                    ? "Go to dashboard"
+                    : hasUsedTrial
+                    ? "Start now"
+                    : "Start free trial"}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -535,7 +543,7 @@ export default function LandingPage() {
 
         {/* ── Features ──────────────────────────────────────────────────── */}
         <section id="features" className="py-24 px-6 max-w-7xl mx-auto mb-12 scroll-mt-24 border-t border-surface-200">
-          <div className="max-w-3xl mb-16">
+          <div className="max-w-3xl mx-auto text-center mb-16">
             <FadeUp>
               <h2 className="text-3xl sm:text-4xl font-bold text-dark-900 mb-4 tracking-tight">
                 Everything you need to collaborate seamlessly
