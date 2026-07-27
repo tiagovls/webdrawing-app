@@ -21,6 +21,7 @@ import {
   Lock,
   Smartphone,
   Zap,
+  Check,
 } from 'lucide-react'
 import { Pricing } from '@/components/blocks/pricing'
 import { PlanBadge } from '@/components/blocks/plan-badge'
@@ -333,148 +334,169 @@ export default function LandingPage() {
 
       {/* Main Content Area */}
       <main className="flex-1 w-full bg-surface-50">
-        {/* ── Problem & Comparison (eDrawings vs WebDrawing) ─────────── */}
-        <section className="py-24 px-6 max-w-6xl mx-auto">
-          <FadeUp className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+        {/* ── Problem & Comparison (Unified Section, No Emojis) ─────────── */}
+        <section className="py-24 px-6 max-w-5xl mx-auto">
+          <FadeUp className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200 text-brand-700 text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
               L'Alternative Moderne à eDrawings
             </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-dark-900 leading-tight max-w-4xl mx-auto">
-              Supprimez <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-lg text-dark-900 inline-block -rotate-1 shadow-sm ring-2 ring-[#bbf7d0]/50">90% des frictions</span> d'ouverture de vos fichiers CAO
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-dark-900 leading-tight max-w-4xl mx-auto">
+              <span className="bg-gradient-to-tr from-[#bbf7d0] to-[#86efac] px-3 py-0.5 rounded-xl text-dark-900 inline-block -rotate-1 shadow-sm ring-2 ring-[#bbf7d0]/50 font-black">
+                85% des clients
+              </span>{" "}
+              n'ont pas de logiciel CAO ou les droits administrateur requis pour installer un viewer lourd (eDrawings) sur leur poste professionnel.
             </h2>
-            <p className="text-base sm:text-lg text-dark-500 max-w-2xl mx-auto mt-4">
-              Ne perdez plus vos clients avec des logiciels de 500 Mo, des pièces jointes d'e-mails bloquées et des plugins obsolètes.
-            </p>
           </FadeUp>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            
-            {/* Left: Big Shocking Stat & Value Cards */}
-            <FadeUp delay={0.1} className="lg:col-span-5 flex flex-col justify-between bg-gradient-to-br from-dark-900 via-dark-900 to-dark-800 text-white rounded-3xl p-8 sm:p-10 shadow-2xl border border-dark-700 relative overflow-hidden">
-              {/* Background Glow */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-500/20 rounded-full blur-3xl pointer-events-none" />
-              
+          {/* Unified Comparison Container Card */}
+          <FadeUp delay={0.1} className="bg-white rounded-3xl p-6 sm:p-10 border border-surface-200 shadow-xl overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-surface-200">
               <div>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-6xl sm:text-7xl font-black tracking-tight text-brand-400">85%</span>
-                  <span className="text-xl sm:text-2xl font-bold text-dark-200">des clients</span>
-                </div>
-                <p className="text-dark-300 text-sm sm:text-base leading-relaxed mb-8">
-                  n'ont pas de logiciel CAO ou les droits administrateur requis pour installer un viewer lourd (eDrawings) sur leur poste professionnel.
-                </p>
-
-                <div className="space-y-4 border-t border-dark-700/80 pt-6">
-                  <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-brand-500/20 text-brand-400 shrink-0 mt-0.5 border border-brand-500/30">
-                      <Zap className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white text-sm sm:text-base">0 sec d'installation</h4>
-                      <p className="text-dark-400 text-xs sm:text-sm">Vos clients ouvrent le modèle 3D instantanément sur n'importe quel écran.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-brand-500/20 text-brand-400 shrink-0 mt-0.5 border border-brand-500/30">
-                      <Smartphone className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white text-sm sm:text-base">100% compatible Web & Mobile</h4>
-                      <p className="text-dark-400 text-xs sm:text-sm">Fonctionne sur iPhone, Android, Mac, PC et tablettes sans aucune application.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3.5">
-                    <div className="p-2.5 rounded-xl bg-brand-500/20 text-brand-400 shrink-0 mt-0.5 border border-brand-500/30">
-                      <Shield className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white text-sm sm:text-base">Partage ultra-sécurisé</h4>
-                      <p className="text-dark-400 text-xs sm:text-sm">Contrôlez les accès avec mot de passe et révoquez le lien à tout moment.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-dark-700/80 flex items-center justify-between">
-                <span className="text-xs text-dark-400 font-medium">Prêt en moins de 1 minute</span>
-                <Link
-                  href="/#pricing"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-400 hover:text-brand-300 transition-colors"
-                >
-                  <span>Essayer WebDrawing</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </FadeUp>
-
-            {/* Right: Comparison Table Card */}
-            <FadeUp delay={0.2} className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-surface-200 shadow-xl flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-dark-900 mb-6 flex items-center justify-between">
-                  <span>Comparatif direct</span>
-                  <span className="text-xs font-medium px-3 py-1 rounded-full bg-surface-100 text-dark-600 border border-surface-200">eDrawings vs WebDrawing</span>
+                <h3 className="text-xl sm:text-2xl font-bold text-dark-900">
+                  Pourquoi choisir WebDrawing ?
                 </h3>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs sm:text-sm border-collapse">
-                    <thead>
-                      <tr className="border-b border-surface-200">
-                        <th className="py-3 px-3 font-semibold text-dark-500 w-2/5">Fonctionnalité</th>
-                        <th className="py-3 px-3 font-semibold text-red-600 bg-red-50/60 rounded-t-xl w-3/10 text-center">eDrawings / Desktop</th>
-                        <th className="py-3 px-3 font-bold text-brand-700 bg-brand-50/70 rounded-t-xl w-3/10 text-center">WebDrawing</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-surface-100">
-                      <tr>
-                        <td className="py-3.5 px-3 font-medium text-dark-900">Installation requise</td>
-                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ 300 Mo à 1 Go</td>
-                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ 0 Mo (Lien Web 1s)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-3 font-medium text-dark-900">Compatibilité Mobile & Mac</td>
-                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Limitée / Payante</td>
-                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ 100% Universel</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-3 font-medium text-dark-900">Envoi par e-mail</td>
-                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Bloqué si &gt; 25 Mo</td>
-                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Lien URL instantané</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-3 font-medium text-dark-900">Droits Administrateur (IT)</td>
-                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Indispensables</td>
-                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Aucun requis</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-3 font-medium text-dark-900">Annotations & Mesures 3D</td>
-                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">⚠️ Version Pro requise</td>
-                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Inclus & En direct</td>
-                      </tr>
-                      <tr>
-                        <td className="py-3.5 px-3 font-medium text-dark-900">Contrôle de la sécurité IP</td>
-                        <td className="py-3.5 px-3 text-center bg-red-50/30 text-red-600 font-medium">❌ Conservé chez le client</td>
-                        <td className="py-3.5 px-3 text-center bg-brand-50/30 text-brand-700 font-bold">✅ Lien révocable 1-clic</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-surface-200 flex flex-col sm:flex-row items-center justify-between gap-4 bg-surface-50 p-4 rounded-2xl">
-                <p className="text-xs text-dark-600 font-medium text-center sm:text-left">
-                  Offrez une expérience moderne et fluide à vos clients et partenaires.
+                <p className="text-xs sm:text-sm text-dark-500 mt-1">
+                  Une comparaison directe avec les logiciels et visualiseurs de bureau traditionnels.
                 </p>
-                <Link
-                  href="/#pricing"
-                  className="w-full sm:w-auto px-5 py-2.5 bg-dark-900 hover:bg-dark-800 text-white font-semibold text-xs rounded-xl transition-all shadow-md text-center shrink-0"
-                >
-                  Commencer l'essai gratuit
-                </Link>
               </div>
-            </FadeUp>
+              <span className="self-start md:self-auto text-xs font-semibold px-3 py-1.5 rounded-full bg-surface-100 text-dark-600 border border-surface-200">
+                eDrawings vs WebDrawing
+              </span>
+            </div>
 
-          </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-surface-200">
+                    <th className="py-3.5 px-4 font-bold text-dark-700 w-2/5">Fonctionnalité</th>
+                    <th className="py-3.5 px-4 font-bold text-rose-700 bg-rose-50/50 rounded-t-xl w-3/10 text-center">
+                      eDrawings / Desktop
+                    </th>
+                    <th className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/70 rounded-t-xl w-3/10 text-center">
+                      WebDrawing
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-100">
+                  <tr>
+                    <td className="py-4 px-4 font-medium text-dark-900">Installation requise</td>
+                    <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <X className="w-4 h-4 text-rose-500 shrink-0" />
+                        <span>300 Mo à 1 Go</span>
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
+                        <span>0 Mo (Lien Web 1s)</span>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 px-4 font-medium text-dark-900">Compatibilité Mobile & Mac</td>
+                    <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <X className="w-4 h-4 text-rose-500 shrink-0" />
+                        <span>Limitée / Payante</span>
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
+                        <span>100% Universel</span>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 px-4 font-medium text-dark-900">Envoi par e-mail</td>
+                    <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <X className="w-4 h-4 text-rose-500 shrink-0" />
+                        <span>Bloqué si &gt; 25 Mo</span>
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
+                        <span>Lien URL instantané</span>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 px-4 font-medium text-dark-900">Droits Administrateur (IT)</td>
+                    <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <X className="w-4 h-4 text-rose-500 shrink-0" />
+                        <span>Indispensables</span>
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
+                        <span>Aucun requis</span>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 px-4 font-medium text-dark-900">Annotations & Mesures 3D</td>
+                    <td className="py-4 px-4 text-center bg-rose-50/20 text-amber-700 font-medium">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Lock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                        <span>Version Pro requise</span>
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
+                        <span>Inclus & En direct</span>
+                      </span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td className="py-4 px-4 font-medium text-dark-900">Contrôle de la sécurité IP</td>
+                    <td className="py-4 px-4 text-center bg-rose-50/20 text-rose-700 font-medium">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <X className="w-4 h-4 text-rose-500 shrink-0" />
+                        <span>Stocké chez le client</span>
+                      </span>
+                    </td>
+                    <td className="py-4 px-4 text-center bg-emerald-50/30 text-emerald-800 font-bold">
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 stroke-[3]" />
+                        <span>Lien révocable 1-clic</span>
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Bottom Callout Banner inside the same card */}
+            <div className="mt-8 pt-6 border-t border-surface-200 bg-gradient-to-r from-dark-900 via-dark-900 to-dark-800 text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-lg border border-dark-700">
+              <div className="space-y-1 text-center sm:text-left">
+                <h4 className="text-base sm:text-lg font-bold text-white">
+                  Prêt à supprimer les blocages de vos clients ?
+                </h4>
+                <p className="text-xs sm:text-sm text-dark-300">
+                  Partagez vos pièces et assemblages CAO en 1 clic sans aucune installation.
+                </p>
+              </div>
+
+              <Link
+                href="/#pricing"
+                className="w-full sm:w-auto px-6 py-3 bg-brand-500 hover:bg-brand-400 text-dark-950 font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md hover:shadow-brand-500/20 text-center shrink-0 inline-flex items-center justify-center gap-2"
+              >
+                <span>Commencer l'essai gratuit</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </FadeUp>
         </section>
         {/* ── How it works ──────────────────────────────────────────────── */}
         <section id="how" className="py-24 px-6 w-full bg-white border-y border-surface-200 scroll-mt-24">
