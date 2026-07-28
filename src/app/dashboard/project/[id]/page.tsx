@@ -30,6 +30,7 @@ interface ShareLink {
   passwordHash?: string | null
   expiresAt: string | null
   createdAt: string
+  label?: string | null
 }
 
 interface Project {
@@ -96,6 +97,7 @@ function CreateLinkModal({
   onClose: () => void
   onCreated: (link: ShareLink) => void
 }) {
+  const [label, setLabel] = useState('')
   const [password, setPassword] = useState('')
   const [expiresIn, setExpiresIn] = useState<string>('')
   const [isLoading, setIsLoading] = useState(false)
@@ -116,6 +118,7 @@ function CreateLinkModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           projectId,
+          label: label.trim() || undefined,
           password: password || undefined,
           expiresIn: expiresIn ? parseInt(expiresIn) : undefined,
         }),
@@ -137,6 +140,20 @@ function CreateLinkModal({
         <h3 className="text-lg font-bold text-dark-900 mb-5">New share link</h3>
 
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1.5">
+              Title <span className="text-dark-400 font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Client X, Review v2..."
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              maxLength={60}
+              className="w-full border border-surface-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-brand-400 bg-surface-50"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-dark-700 mb-1.5">
               Password (optional)
@@ -363,6 +380,9 @@ export default function ProjectPage() {
 
                   {/* Link info */}
                   <div className="flex-1 min-w-0 w-full sm:w-auto">
+                    {link.label && (
+                      <p className="text-sm font-semibold text-dark-900 mb-0.5 truncate">{link.label}</p>
+                    )}
                     <div className="hidden sm:flex items-center gap-2">
                       <p className="text-sm font-mono text-dark-700 truncate">{shareUrl}</p>
                       <CopyButton text={shareUrl} />

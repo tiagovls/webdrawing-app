@@ -53,6 +53,7 @@ model ShareLink {
   token        String       @unique
   projectId    String
   project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  label        String?      // Short title set by creator e.g. "Client X"
   passwordHash String?      // bcrypt hash, null if no password
   expiresAt    DateTime?    // null = never expires
   creatorNote  String?      // Notes written by the link creator

@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const { userId } = await auth()
     if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-    const { projectId, password, expiresIn } = await req.json()
+    const { projectId, label, password, expiresIn } = await req.json()
     if (!projectId) return NextResponse.json({ error: 'Missing projectId' }, { status: 400 })
 
     // Verify project ownership
@@ -34,6 +34,7 @@ export async function POST(req: Request) {
       data: {
         token: nanoid(16),
         projectId,
+        label: label?.trim() || null,
         passwordHash,
         expiresAt,
       },
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
       id: shareLink.id,
       token: shareLink.token,
       url: `${appUrl}/view/${shareLink.token}`,
+      label: shareLink.label,
       hasPassword: !!passwordHash,
       expiresAt: shareLink.expiresAt,
     })
