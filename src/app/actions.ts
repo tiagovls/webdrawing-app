@@ -14,10 +14,34 @@ export async function getUserPlan(clientUserId?: string) {
       return { isPro: false, plan: "Free", hasUsedTrial: false }
     }
 
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({
       where: { id: userId },
       select: { stripeCurrentPeriodEnd: true, stripeSubscriptionId: true, stripeCustomerId: true, hasUsedTrial: true }
     })
+
+    // Fallback: if not found by Clerk ID (dev→prod migration), search by email
+    if (!user) {
+      const clerkUser = await currentUser();
+      const email = clerkUser?.emailAddresses?.[0]?.emailAddress;
+      if (email) {
+        const userByEmail = await prisma.user.findFirst({
+          where: { email },
+        });
+        if (userByEmail) {
+          // Migrate: update the stored ID to the current production Clerk ID
+          await prisma.user.update({
+            where: { email },
+            data: { id: userId },
+          });
+          user = {
+            stripeCurrentPeriodEnd: userByEmail.stripeCurrentPeriodEnd,
+            stripeSubscriptionId: userByEmail.stripeSubscriptionId,
+            stripeCustomerId: userByEmail.stripeCustomerId,
+            hasUsedTrial: userByEmail.hasUsedTrial,
+          };
+        }
+      }
+    }
 
     if (!user) {
       return { isPro: false, plan: "Free", hasUsedTrial: false }
