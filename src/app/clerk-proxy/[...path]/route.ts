@@ -1,79 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const CLERK_FAPI = 'https://frontend-api.clerk.services'
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  return proxyToClerk(req, path)
-}
-
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  return proxyToClerk(req, path)
-}
-
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  return proxyToClerk(req, path)
-}
-
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  return proxyToClerk(req, path)
-}
-
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  return proxyToClerk(req, path)
-}
-
-export async function OPTIONS(
-  req: NextRequest,
-  { params }: { params: Promise<{ path: string[] }> }
-) {
-  const { path } = await params
-  return proxyToClerk(req, path)
-}
+// Vercel's DNS CAN resolve clerk.webdrawing.fr even if the user's browser cannot.
+// We proxy directly to clerk.webdrawing.fr which tells Cloudflare/Clerk the correct instance.
+const CLERK_FAPI = 'https://clerk.webdrawing.fr'
 
 async function proxyToClerk(req: NextRequest, path: string[]) {
   try {
     const targetUrl = new URL(`${CLERK_FAPI}/${path.join('/')}`)
     targetUrl.search = req.nextUrl.search
 
-    // Build safe headers (avoid restricted headers)
-    const forwardHeaders: Record<string, string> = {}
-    const allowed = [
-      'accept',
-      'accept-language',
-      'content-type',
-      'authorization',
-      'cookie',
-      'x-clerk-auth-token',
-      'x-forwarded-for',
-      'origin',
-      'referer',
-    ]
-    for (const key of allowed) {
-      const val = req.headers.get(key)
-      if (val) forwardHeaders[key] = val
+    // Forward safe headers
+    const forwardHeaders: Record<string, string> = {
+      'accept': req.headers.get('accept') || '*/*',
+      'accept-language': req.headers.get('accept-language') || 'fr',
+      'origin': 'https://webdrawing.fr',
     }
-    // Tell Clerk the real client IP
-    forwardHeaders['x-forwarded-host'] = req.headers.get('host') ?? 'webdrawing.fr'
+    const contentType = req.headers.get('content-type')
+    if (contentType) forwardHeaders['content-type'] = contentType
+    const authorization = req.headers.get('authorization')
+    if (authorization) forwardHeaders['authorization'] = authorization
+    const cookie = req.headers.get('cookie')
+    if (cookie) forwardHeaders['cookie'] = cookie
 
     const fetchOptions: RequestInit = {
       method: req.method,
@@ -87,22 +34,66 @@ async function proxyToClerk(req: NextRequest, path: string[]) {
 
     const upstream = await fetch(targetUrl.toString(), fetchOptions)
 
-    // Build response headers
     const resHeaders = new Headers()
-    const copyHeaders = ['content-type', 'cache-control', 'set-cookie']
-    for (const key of copyHeaders) {
-      const val = upstream.headers.get(key)
-      if (val) resHeaders.set(key, val)
-    }
-    resHeaders.set('Access-Control-Allow-Origin', '*')
+    const contentTypeRes = upstream.headers.get('content-type')
+    if (contentTypeRes) resHeaders.set('content-type', contentTypeRes)
+    const cacheControl = upstream.headers.get('cache-control')
+    if (cacheControl) resHeaders.set('cache-control', cacheControl)
+    const setCookie = upstream.headers.get('set-cookie')
+    if (setCookie) resHeaders.set('set-cookie', setCookie)
+    resHeaders.set('access-control-allow-origin', '*')
 
-    const body = await upstream.arrayBuffer()
-    return new NextResponse(body, {
+    return new NextResponse(upstream.body, {
       status: upstream.status,
       headers: resHeaders,
     })
   } catch (err) {
-    console.error('[clerk-proxy] Error:', err)
-    return NextResponse.json({ error: 'Proxy error', details: String(err) }, { status: 502 })
+    console.error('[clerk-proxy] Error proxying to clerk.webdrawing.fr:', err)
+    return NextResponse.json(
+      { error: 'Proxy error', details: String(err) },
+      { status: 502 }
+    )
   }
+}
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  return proxyToClerk(req, (await params).path)
+}
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  return proxyToClerk(req, (await params).path)
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  return proxyToClerk(req, (await params).path)
+}
+
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  return proxyToClerk(req, (await params).path)
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  return proxyToClerk(req, (await params).path)
+}
+
+export async function OPTIONS(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  return proxyToClerk(req, (await params).path)
 }
