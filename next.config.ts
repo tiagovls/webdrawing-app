@@ -15,6 +15,19 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  // Clerk proxy — bypasses clerk.webdrawing.fr DNS, routes through our own domain
+  async rewrites() {
+    return [
+      {
+        source: '/clerk-proxy/:path*',
+        destination: 'https://frontend-api.clerk.services/:path*',
+      },
+      {
+        source: '/clerk-proxy-accounts/:path*',
+        destination: 'https://api.clerk.services/:path*',
+      },
+    ]
+  },
 }
 
 export default nextConfig

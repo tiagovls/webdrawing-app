@@ -108,7 +108,7 @@ export default function RootLayout({
   }
 
   return (
-    <ClerkProvider>
+    <ClerkProvider proxyUrl="https://www.webdrawing.fr/clerk-proxy">
       <html lang="fr" className={inter.variable}>
         <head>
           <script
